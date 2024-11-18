@@ -14,7 +14,6 @@ public class TourResponse {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    
 	public Long getId() {
 		return id;
 	}
