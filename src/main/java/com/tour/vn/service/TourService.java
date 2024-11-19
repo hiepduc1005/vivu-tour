@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface TourService {
 	Tour createTour(Tour tour);
 	    
-    Tour updateTour(Long id, Tour tour);
+    Tour updateTour(Tour tour);
     
     Optional<Tour> getTourById(Long id);
     

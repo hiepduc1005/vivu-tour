@@ -26,12 +26,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public Tour updateTour(Long id, Tour tour) {
-        // Check if tour exists before updating
-        if (!tourRepository.existsById(id)) {
-            throw new RuntimeException("Tour not found with id " + id);
-        }
-        tour.setId(id);
+    public Tour updateTour( Tour tour) {
         return tourRepository.save(tour);
     }
 

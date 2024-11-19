@@ -1,52 +1,62 @@
 package com.tour.vn.controller;
 
+import com.tour.vn.dto.TourCreate;
+import com.tour.vn.dto.TourResponse;
+import com.tour.vn.dto.TourUpdate;
 import com.tour.vn.entity.Location;
 import com.tour.vn.entity.Tour;
 import com.tour.vn.service.TourService;
+import com.tour.vn.service.convert.TourConvert;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/tours")
 public class TourController {
 
     private final TourService tourService;
+    private final TourConvert tourConvert;
 
-    public TourController(TourService tourService) {
+    public TourController(TourService tourService,TourConvert tourConvert) {
         this.tourService = tourService;
+        this.tourConvert = tourConvert;
     }
 
     // Create a new tour (Admin-only endpoint)
     @PostMapping("/create")
-    public ResponseEntity<Tour> createTour(@RequestBody Tour tour) {
-        Tour createdTour = tourService.createTour(tour);
-        return ResponseEntity.ok(createdTour);
+    public ResponseEntity<TourResponse> createTour(@RequestBody TourCreate tour) {
+        Tour createdTour = tourService.createTour(tourConvert.tourCreateConvertToTour(tour));
+        TourResponse tourResponse = tourConvert.tourConvertToTourResponse(createdTour);
+        return ResponseEntity.ok(tourResponse);
     }
 
     // Update an existing tour (Admin-only endpoint)
     @PutMapping("/{id}")
-    public ResponseEntity<Tour> updateTour(@PathVariable Long id, @RequestBody Tour tour) {
-        Tour updatedTour = tourService.updateTour(id, tour);
-        return ResponseEntity.ok(updatedTour);
+    public ResponseEntity<TourResponse> updateTour(@PathVariable Long id, @RequestBody TourUpdate tour) {
+    	Tour existingTour = tourService.getTourById(id).get();
+        Tour updatedTour = tourService.updateTour(tourConvert.tourUpdateConvertToTour(tour, existingTour));
+        TourResponse tourResponse = tourConvert.tourConvertToTourResponse(updatedTour);
+        return ResponseEntity.ok(tourResponse);
     }
 
     // Get a tour by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Tour> getTourById(@PathVariable Long id) {
-        Optional<Tour> tour = tourService.getTourById(id);
-        return tour.map(ResponseEntity::ok)
-                   .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<TourResponse> getTourById(@PathVariable Long id) {
+        Tour tour = tourService.getTourById(id).get();
+        TourResponse tourResponse = tourConvert.tourConvertToTourResponse(tour);
+        return ResponseEntity.ok(tourResponse);
     }
 
     // Get all tours
     @GetMapping
-    public ResponseEntity<List<Tour>> getAllTours() {
+    public ResponseEntity<List<TourResponse>> getAllTours() {
         List<Tour> tours = tourService.getAllTours();
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+        return ResponseEntity.ok(toursResponse);
     }
 
     // Delete a tour (Admin-only endpoint)
@@ -58,24 +68,28 @@ public class TourController {
 
     // Get tours by location
     @GetMapping("/by-location")
-    public ResponseEntity<List<Tour>> getToursByLocation(@RequestParam Location location) {
+    public ResponseEntity<List<TourResponse>> getToursByLocation(@RequestParam Location location) {
         List<Tour> tours = tourService.getToursByLocation(location);
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+        return ResponseEntity.ok(toursResponse);
     }
 
     // Get tours by start date
     @GetMapping("/by-start-date")
-    public ResponseEntity<List<Tour>> getToursByStartDate(@RequestParam String startDate) {
+    public ResponseEntity<List<TourResponse>> getToursByStartDate(@RequestParam String startDate) {
         LocalDateTime start = LocalDateTime.parse(startDate);
         List<Tour> tours = tourService.getToursByStartDate(start);
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+        return ResponseEntity.ok(toursResponse);
     }
 
     // Search tours by keyword
     @GetMapping("/search")
-    public ResponseEntity<List<Tour>> searchTours(@RequestParam String keyword) {
+    public ResponseEntity<List<TourResponse>> searchTours(@RequestParam String keyword) {
         List<Tour> tours = tourService.searchTours(keyword);
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+
+        return ResponseEntity.ok(toursResponse);
     }
 
     // Check availability for a tour
@@ -94,17 +108,20 @@ public class TourController {
 
     // Get tours by start date and location
     @GetMapping("/by-start-date-and-location")
-    public ResponseEntity<List<Tour>> getToursByStartDateAndLocation(
+    public ResponseEntity<List<TourResponse>> getToursByStartDateAndLocation(
             @RequestParam String startDate, @RequestParam Location location) {
         LocalDateTime start = LocalDateTime.parse(startDate);
         List<Tour> tours = tourService.getToursByStartDateAndLocation(start, location);
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+        return ResponseEntity.ok(toursResponse);
     }
 
     // Get tours by start 
     @GetMapping("/by-start-location")
-    public ResponseEntity<List<Tour>> getToursByStartLocation(@RequestParam Location locationStart) {
+    public ResponseEntity<List<TourResponse>> getToursByStartLocation(@RequestParam Location locationStart) {
         List<Tour> tours = tourService.getToursByStartLocation(locationStart);
-        return ResponseEntity.ok(tours);
+        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+
+        return ResponseEntity.ok(toursResponse);
     }
 }
