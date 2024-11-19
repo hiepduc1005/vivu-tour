@@ -51,7 +51,7 @@ public class TourController {
         return ResponseEntity.ok(tourResponse);
     }
 
-    // Get all tours
+    // Get all tours d
     @GetMapping
     public ResponseEntity<List<TourResponse>> getAllTours() {
         List<Tour> tours = tourService.getAllTours();
