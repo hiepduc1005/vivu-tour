@@ -2,6 +2,7 @@ package com.tour.vn.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,9 +30,19 @@ public class SecurityConfig {
 	 }
 	
 	 @Bean
-	 public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+	 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	 	 http.csrf(csrf -> csrf.disable())
-			 .authorizeHttpRequests(request -> request.re)
+	 	 .authorizeHttpRequests(auth -> auth
+	             .requestMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll() // Public endpoints
+	             .requestMatchers(HttpMethod.POST, "/api/v1/tours").authenticated() // Yêu cầu đăng nhập
+	             .requestMatchers(HttpMethod.PUT, "/api/v1/tours/**").authenticated()
+	             .requestMatchers(HttpMethod.DELETE, "/api/v1/tours/**").authenticated()
+	             .requestMatchers("/api/v1/users/**").authenticated()
+	             .requestMatchers("/api/v1/bookings/**").authenticated()// User endpoints yêu cầu xác thực
+	             .anyRequest().denyAll() // Các yêu cầu khác bị từ chối
+	         );
+	 	 
+	 	 return http.build();
 	 }
 		
 	@Bean

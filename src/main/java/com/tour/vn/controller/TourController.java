@@ -5,6 +5,7 @@ import com.tour.vn.dto.TourResponse;
 import com.tour.vn.dto.TourUpdate;
 import com.tour.vn.entity.Location;
 import com.tour.vn.entity.Tour;
+import com.tour.vn.service.LocationService;
 import com.tour.vn.service.TourService;
 import com.tour.vn.service.convert.TourConvert;
 
@@ -20,10 +21,12 @@ public class TourController {
 
     private final TourService tourService;
     private final TourConvert tourConvert;
+    private final LocationService locationService;
 
-    public TourController(TourService tourService,TourConvert tourConvert) {
+    public TourController(TourService tourService,TourConvert tourConvert,LocationService locationService) {
         this.tourService = tourService;
         this.tourConvert = tourConvert;
+        this.locationService = locationService;
     }
 
     // Create a new tour (Admin-only endpoint)
@@ -66,11 +69,16 @@ public class TourController {
         return ResponseEntity.ok().build();
     }
 
-    // Get tours by location
     @GetMapping("/by-location")
-    public ResponseEntity<List<TourResponse>> getToursByLocation(@RequestParam Location location) {
+    public ResponseEntity<List<TourResponse>> getToursByLocation(@RequestParam Long locationId) {
+        Location location = locationService.getLocationById(locationId);
+
         List<Tour> tours = tourService.getToursByLocation(location);
-        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+
+        List<TourResponse> toursResponse = tours.stream()
+                .map(tour -> tourConvert.tourConvertToTourResponse(tour))
+                .toList();
+
         return ResponseEntity.ok(toursResponse);
     }
 
@@ -99,28 +107,37 @@ public class TourController {
         return ResponseEntity.ok(isAvailable);
     }
 
-    // Update available slots after booking
     @PutMapping("/{id}/update-slots")
     public ResponseEntity<Void> updateAvailableSlots(@PathVariable Long id, @RequestParam int bookedSlots) {
         tourService.updateAvailableSlots(id, bookedSlots);
         return ResponseEntity.noContent().build();
     }
 
-    // Get tours by start date and location
     @GetMapping("/by-start-date-and-location")
     public ResponseEntity<List<TourResponse>> getToursByStartDateAndLocation(
-            @RequestParam String startDate, @RequestParam Location location) {
+            @RequestParam String startDate, @RequestParam Long locationId) {
         LocalDateTime start = LocalDateTime.parse(startDate);
+
+        Location location = locationService.getLocationById(locationId);
+
         List<Tour> tours = tourService.getToursByStartDateAndLocation(start, location);
-        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+
+        List<TourResponse> toursResponse = tours.stream()
+                .map(tour -> tourConvert.tourConvertToTourResponse(tour))
+                .toList();
+
         return ResponseEntity.ok(toursResponse);
     }
 
-    // Get tours by start 
     @GetMapping("/by-start-location")
-    public ResponseEntity<List<TourResponse>> getToursByStartLocation(@RequestParam Location locationStart) {
-        List<Tour> tours = tourService.getToursByStartLocation(locationStart);
-        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+    public ResponseEntity<List<TourResponse>> getToursByStartLocation(@RequestParam Long locationId) {
+        Location location = locationService.getLocationById(locationId);
+
+        List<Tour> tours = tourService.getToursByStartLocation(location);
+
+        List<TourResponse> toursResponse = tours.stream()
+                .map(tour -> tourConvert.tourConvertToTourResponse(tour))
+                .toList();
 
         return ResponseEntity.ok(toursResponse);
     }
