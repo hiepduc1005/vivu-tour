@@ -1,25 +1,16 @@
-package com.tour.vn.entity;
+package com.tour.vn.dto;
 
-import jakarta.persistence.*;
+public class LocationResponse {
 
-@Entity
-@Table(name = "location")
-public class Location {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String name;
-
     private String description;
+    private String imagePath;  // Đường dẫn ảnh
 
-    @Column(name = "image_path") // Tên cột trong database
-    private String imagePath; // Đường dẫn ảnh
+    public LocationResponse() {}
 
-    public Location() {}
-
-    public Location(String name, String description, String imagePath) {
+    public LocationResponse(Long id, String name, String description, String imagePath) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
