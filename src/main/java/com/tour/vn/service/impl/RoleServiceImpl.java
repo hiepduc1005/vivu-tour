@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
         User user = new User(); 
         user.setId(userId);
         
-        Optional<Role> role = roleRepository.findByUser(user);
+        Optional<Role> role = roleRepository.findByUsers(user);
         return role.orElse(null);  // Trả về Role nếu tìm thấy, nếu không trả về null
     }
 }
