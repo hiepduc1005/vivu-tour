@@ -1,6 +1,7 @@
 package com.tour.vn.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TourUpdate {
 	private String name;
@@ -11,6 +12,15 @@ public class TourUpdate {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private List<String> images; // Thêm ảnh
+
+    
+	public List<String> getImages() {
+		return images;
+	}
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
 	public String getName() {
 		return name;
 	}

@@ -2,6 +2,7 @@ package com.tour.vn.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,12 @@ public class Tour {
     private double prices;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    
+    @ElementCollection
+    @CollectionTable(name = "tour_images", joinColumns = @JoinColumn(name = "tour_id"))
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "location_start_id")
@@ -44,6 +51,13 @@ public class Tour {
     private List<Review> reviews;
 
     // Getters and Setters
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
     public Long getId() {
         return id;
     }

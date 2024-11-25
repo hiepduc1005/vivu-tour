@@ -3,6 +3,7 @@ package com.tour.vn.dto;
 import com.tour.vn.entity.Location;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TourResponse {
     private Long id;
@@ -14,6 +15,15 @@ public class TourResponse {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private List<String> images; // Thêm ảnh
+
+    
+	public List<String> getImages() {
+		return images;
+	}
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
 	public Long getId() {
 		return id;
 	}

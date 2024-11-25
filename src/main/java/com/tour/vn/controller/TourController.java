@@ -5,12 +5,15 @@ import com.tour.vn.dto.TourResponse;
 import com.tour.vn.dto.TourUpdate;
 import com.tour.vn.entity.Location;
 import com.tour.vn.entity.Tour;
+import com.tour.vn.service.FileUploadService;
 import com.tour.vn.service.LocationService;
 import com.tour.vn.service.TourService;
 import com.tour.vn.service.convert.TourConvert;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,24 +25,44 @@ public class TourController {
     private final TourService tourService;
     private final TourConvert tourConvert;
     private final LocationService locationService;
+    private final FileUploadService fileUploadService;
+    
 
-    public TourController(TourService tourService,TourConvert tourConvert,LocationService locationService) {
+    public TourController(FileUploadService fileUploadService,TourService tourService,TourConvert tourConvert,LocationService locationService) {
         this.tourService = tourService;
         this.tourConvert = tourConvert;
         this.locationService = locationService;
+        this.fileUploadService = fileUploadService;
     }
 
     // Create a new tour (Admin-only endpoint)
-    @PostMapping("/create")
-    public ResponseEntity<TourResponse> createTour(@RequestBody TourCreate tour) {
+    @PostMapping(value = "/create", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<TourResponse> createTour(
+    		@RequestPart("tour") TourCreate tour,
+    		@RequestPart("images") List<MultipartFile> images) {
+    	
+    	List<String> imagePaths = images.stream()
+    			.map(image -> fileUploadService.saveFileToSever(image)).toList();
+    	
+        tour.setImages(imagePaths);
+    	
         Tour createdTour = tourService.createTour(tourConvert.tourCreateConvertToTour(tour));
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(createdTour);
         return ResponseEntity.ok(tourResponse);
     }
 
     // Update an existing tour (Admin-only endpoint)
-    @PutMapping("/{id}")
-    public ResponseEntity<TourResponse> updateTour(@PathVariable Long id, @RequestBody TourUpdate tour) {
+    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<TourResponse> updateTour(
+    		@PathVariable Long id,
+    		@RequestPart("tour") TourUpdate tour,
+    		@RequestPart("images") List<MultipartFile> images) {
+    	
+    	List<String> imagePaths = images.stream()
+    			.map(image -> fileUploadService.saveFileToSever(image)).toList();
+    	
+        tour.setImages(imagePaths);
+        
     	Tour existingTour = tourService.getTourById(id).get();
         Tour updatedTour = tourService.updateTour(tourConvert.tourUpdateConvertToTour(tour, existingTour));
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(updatedTour);

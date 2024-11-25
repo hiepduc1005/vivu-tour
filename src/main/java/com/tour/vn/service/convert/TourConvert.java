@@ -34,6 +34,8 @@ public class TourConvert {
 	        tour.setLocationStart(startLocation);
 
 	        tour.setLocation(endLocation);
+	        tour.setImages(dto.getImages()); // Set ảnh
+
 	        
 	        return tour;
 	}
@@ -53,7 +55,8 @@ public class TourConvert {
         existingTour.setPrices(tourUpdate.getPricePerPerson());
         existingTour.setStartDate(tourUpdate.getStartDate());
         existingTour.setEndDate(tourUpdate.getEndDate());
-        
+        existingTour.setImages(tourUpdate.getImages()); // Cập nhật ảnh
+
         return existingTour;
 	}
 	
@@ -72,6 +75,8 @@ public class TourConvert {
         // Set start and end locations
         response.setStartLocation(tour.getLocationStart());
         response.setEndLocation(tour.getLocation());
+        response.setImages(tour.getImages()); // Get ảnh
+
         
         return response;
 	}

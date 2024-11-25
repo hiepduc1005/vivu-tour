@@ -1,5 +1,6 @@
 package com.tour.vn.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,6 +21,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class SecurityConfig {
 	
+	@Autowired
+	public CustomUserDetailsService customUserDetailsService;
+	
+	
+
+	public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+		this.customUserDetailsService = customUserDetailsService;
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -29,22 +39,32 @@ public class SecurityConfig {
 	 public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 	        return authenticationConfiguration.getAuthenticationManager();
 	 }
+	 
+	 @Bean
+	 public JWTFilterChain jwtFilterChain() {
+		 return new JWTFilterChain();
+	 }
 	
 	 @Bean
 	 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	 	 http.csrf(csrf -> csrf.disable())
 		 	 .authorizeHttpRequests(auth -> auth
 		             .requestMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll() // Public endpoints
+		             .requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll() // Xem danh sách reviews công khai
+
 		             .requestMatchers(HttpMethod.POST, "/api/v1/tours").authenticated() // Yêu cầu đăng nhập
 		             .requestMatchers(HttpMethod.PUT, "/api/v1/tours/**").authenticated()
 		             .requestMatchers(HttpMethod.DELETE, "/api/v1/tours/**").authenticated()
+		             
+		             .requestMatchers(HttpMethod.POST, "/api/v1/reviews").authenticated() // Viết review yêu cầu đăng nhập
+		             .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").authenticated() // Xóa review yêu cầu đăng nhập
 		             .requestMatchers("/api/v1/users/**").authenticated()
-		             .requestMatchers("/api/v1/bookings/**").authenticated()// User endpoints yêu cầu xác thực
+		             .requestMatchers("/api/v1/bookings/**").authenticated()
 		             .anyRequest().denyAll() // Các yêu cầu khác bị từ chối
 		         )
 		 	 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		 			 );
-	 	 
+	 	 http.addFilterBefore(jwtFilterChain(), UsernamePasswordAuthenticationFilter.class);
 	 	 return http.build();
 	 }
 		

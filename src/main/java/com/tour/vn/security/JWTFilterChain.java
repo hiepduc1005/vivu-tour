@@ -1,19 +1,14 @@
 package com.tour.vn.security;
 
-import java.io.IOException;import java.net.http.HttpHeaders;
+import java.io.IOException;
 
-import org.apache.tomcat.util.http.parser.HttpHeaderParser.HeaderParsePosition;
-import org.apache.tomcat.util.http.parser.HttpHeaderParser.HeaderParseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.auth0.jwt.HeaderParams;
-import com.tour.vn.entity.User;
-import com.tour.vn.service.UserService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,7 +22,7 @@ public class JWTFilterChain extends OncePerRequestFilter{
 	private JWTGenerator jwtGenerator;
 	
 	@Autowired
-	private UserService userService;
+	private CustomUserDetailsService customUserDetailsService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -37,9 +32,11 @@ public class JWTFilterChain extends OncePerRequestFilter{
 		
 		if(StringUtils.hasText(token) && jwtGenerator.verifyToken(token)) {
 			String email = jwtGenerator.getSubjectByToken(token);
-			User user = userService.getUserByEmail(email);
+			UserDetails user = customUserDetailsService.loadUserByUsername(email);
 			
-			SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(email, user));
+			SecurityContextHolder.getContext().setAuthentication(
+					new UsernamePasswordAuthenticationToken(email, null,user.getAuthorities())
+					);
 		}
 		
 		filterChain.doFilter(request, response);
@@ -47,9 +44,11 @@ public class JWTFilterChain extends OncePerRequestFilter{
 	
 	private String getTokenByRequest(HttpServletRequest request) {
 		String authHeader = request.getHeader("Authorization");
-		String token = authHeader.substring(7);
-		
-		return token;
+		if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+	            return authHeader.substring(7); 
+	        }
+
+	   return null; 
 	}
 
 }
