@@ -1,0 +1,39 @@
+/* src/css/AdminUser.css */
+
+.admin-user-container {
+    max-width: 800px; /* Giới hạn độ rộng của container */
+    margin: 0 auto; /* Căn giữa container */
+    padding: 20px; /* Thêm khoảng cách bên trong */
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    border-radius: 8px; /* Bo tròn góc */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+.admin-user-container h2 {
+    text-align: center; /* Căn giữa tiêu đề */
+    color: #333; /* Màu chữ cho tiêu đề */
+}
+
+.admin-user-container ul {
+    list-style: none; /* Xóa dấu đầu dòng */
+    padding: 0; /* Xóa khoảng cách bên trong */
+}
+
+.admin-user-container li {
+    padding: 10px; /* Khoảng cách bên trong cho từng mục */
+    border-bottom: 1px solid #ccc; /* Đường kẻ dưới mỗi mục */
+}
+
+.admin-user-container li:last-child {
+    border-bottom: none; /* Không hiển thị đường kẻ cho mục cuối cùng */
+}
+
+.admin-user-container .error {
+    color: red; /* Màu chữ đỏ cho thông báo lỗi */
+    text-align: center; /* Căn giữa thông báo lỗi */
+}
+
+.admin-user-container p {
+    text-align: center; /* Căn giữa các thông báo */
+    color: #666; /* Màu chữ cho thông báo tải */
+}

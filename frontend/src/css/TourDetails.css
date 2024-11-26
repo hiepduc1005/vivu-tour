@@ -1,0 +1,237 @@
+.tour-details-container{
+    background-color: #ECF0F5;
+}
+.tour-details-container .breadcrumb{
+    padding: 15px 0;
+}
+
+.tour-details-container .tourname{
+    font-weight: bold;
+    color: #003C71;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.tour-details-container .tour-details{
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 30px;
+}
+
+.carousel .img-container{
+    width: 100%;
+}
+
+.carousel .img-container img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.tour-accordion,
+.tour-experience,
+.tour-location-details{
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.tour-location-details .top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 14px;
+}
+
+
+.tour-location-details .tour-code b,
+.tour-location-details .start-location b{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.tour-accordion h2,
+.tour-experience .title b,
+.tour-location-details .bottom span{
+    font-size: 24px;
+    font-weight: bold;
+    color: #3f3b3b;
+    line-height: 1.5;
+}
+
+.tour-location-details .bottom .list-include{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+
+.tour-experience .content{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: justify;
+    line-height: 1.45;
+    font-size: 16px;
+}
+
+.tour-accordion .top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.tour-accordion .top .see-all{
+    font-size: 16px;
+    line-height: 34px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tour-accordion .accordion-list{
+    margin-bottom: 14px;
+}
+
+.tour-details-right{
+    background-color: #feeec7;
+    border-radius: 4px;
+    padding: 20px 15px;
+    height: fit-content;
+}
+
+.tour-details-right .heading h3{
+    font-size: 20px;
+    font-weight: bold;
+    color: #003c71;
+    margin-bottom: 10px;
+}
+
+.tour-details-right .main .title{
+    margin-bottom: 10px;
+}
+
+.list-tour-date{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.list-tour-date .item{
+    min-height: 44px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 5px 12px;
+    margin-right: 8px;
+    line-height: 44px;
+    cursor: pointer;
+    
+}
+
+.tour-details-right .price-person{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 54px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);
+    margin-bottom: 10px;
+    padding:0 10px;
+    position: relative;
+    font-size: 16px;
+}
+
+.price-person .row1 .age{
+    display: block;
+    color: #828282;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.price-person .row3{
+    display: flex;
+    flex-direction: row;
+}
+
+.price-person .row2{
+    color: #ffbd00;
+    font-size: 16px;
+    line-height: 20px;
+    position: absolute;
+    top: 15px;
+    right: 130px;
+}
+
+.price-person .row3 .quantity{
+    margin: 0 28px;
+}
+.tour-details-right .main{
+    margin-bottom: 20px;
+}
+
+.tour-details-right .main .warning{
+    color: #26bed6;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding: 5px 0px;
+}
+
+.tour-details-right .bottom .total-price{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom .total-price .price-number{
+    color: #FFBD00;
+    font-weight: bold;
+    font-size: 28px;
+}
+
+.tour-details-right .bottom .button-book-tour{
+    display: flex;
+    justify-content: space-between;
+}
+
+.tour-details-right .bottom .button-book-tour button{
+    height: 47px;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0 10px;
+    border: 1px solid #f79321;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+    margin-top: 10px;
+}
+
+.tour-details-right .bottom .button-contact:hover,
+.tour-details-right .bottom .button-book:hover{
+    background-color: #f79321;
+    color: #fff;
+    opacity: 0.8;
+}
+
+.button-contact{
+    background-color: #fff;
+    color: #f79321;
+}
+
+.button-book{
+    background-color: #f79321;
+    color: #fff;
+}

@@ -1,0 +1,119 @@
+.tour-container{
+    margin: 15px;
+    transition: all 0.25s ease-in-out;
+    position: relative;
+   
+}
+
+.tour-container:hover{
+    cursor: pointer;
+    box-shadow: 0 0 16px 0 rgba(38, 190, 214, 0.8);
+    outline: solid 1px #26bed6;
+}
+
+.tour-container .tour-wrap{
+    color: #4E4E4E;
+    background-color: white;
+    border: 1px solid #e4e4e6;
+    padding: 10px 15px;
+}
+
+.tour-container img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.tour-container .tour-name{
+    color: #003C71;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.42857143;
+    margin-bottom: 30px;
+}
+
+.tour-container .tour-ratting{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 13px;
+}
+
+.tour-container .tour-ratting .score{
+    padding: 3px 5px;
+    border-radius: 6px;
+    background: #9fc43a;
+    color: #fff;
+    font-weight: bold;
+}
+
+.tour-container .tour-ratting .score-description{
+    color: #9fc43a;
+    font-weight: bold;
+    margin: 0 4px;
+
+}
+
+.tour-container .tour-bottom{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tour-container .tour-bottom .tour-bottom-right{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+   
+}
+
+.tour-container .tour-bottom .origin-price{
+    font-weight: 400;
+    color: #828282;
+    font-size: 15px;
+    text-decoration: line-through;
+}
+
+.currency{
+    font-size: 13px;
+    font-weight: initial;
+}
+
+.tour-container .tour-bottom .discount-price{
+    font-size: 22px;
+    font-weight: bold;
+    float: right;
+    color: #f79321;
+    margin-top: 8px;
+}
+
+.ribbon{
+    position: absolute;
+    padding: 5px 10px 5px 10px;
+    top: 15px;
+    background-color: #E52822;
+    z-index: 1;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0px 2px rgba(0, 0, 0, 0.24);
+    margin-left: -12px;
+}
+
+.ribbon::after{
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 12px solid #9C0000;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid transparent;
+    position: absolute;
+    top: 100%;
+    left: 0%;
+}
+

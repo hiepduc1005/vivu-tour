@@ -1,0 +1,62 @@
+.header {
+    background-color: #003c71;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.header .header-left{
+    display: flex;
+    flex-direction: row;
+   
+}
+
+.header .header-left .nav-link{
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.nav-link li{
+    padding: 20px 12px;
+    cursor: pointer;
+}
+
+.nav-link li:hover{
+    color: #26bed6 !important;
+}
+
+.header .header-right{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+} 
+
+.header-account {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+
+}
+
+.header-right .hotline{
+    padding-left: 30px;
+    font-size: 26px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #f79321;
+}
+
+.header-right .logout{
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+
