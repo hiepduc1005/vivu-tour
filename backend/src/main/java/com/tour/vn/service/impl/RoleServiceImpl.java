@@ -61,4 +61,10 @@ public class RoleServiceImpl implements RoleService {
         Optional<Role> role = roleRepository.findByUsers(user);
         return role.orElse(null);  // Trả về Role nếu tìm thấy, nếu không trả về null
     }
+
+	@Override
+	public Role getRoleByName(String name) {
+		// TODO Auto-generated method stub
+		return roleRepository.findByName(name);
+	}
 }

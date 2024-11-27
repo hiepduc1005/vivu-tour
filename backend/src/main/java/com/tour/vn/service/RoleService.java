@@ -11,4 +11,6 @@ public interface RoleService {
     Role getRoleByEmail(String email);
     
     Role getRoleByUser(Long userId);
+    
+    Role getRoleByName(String name);
 }

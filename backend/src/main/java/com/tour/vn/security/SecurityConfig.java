@@ -49,18 +49,19 @@ public class SecurityConfig {
 	 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	 	 http.csrf(csrf -> csrf.disable())
 		 	 .authorizeHttpRequests(auth -> auth
-		             .requestMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll() // Public endpoints
-		             .requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll() // Xem danh sách reviews công khai
-
-		             .requestMatchers(HttpMethod.POST, "/api/v1/tours").authenticated() // Yêu cầu đăng nhập
-		             .requestMatchers(HttpMethod.PUT, "/api/v1/tours/**").authenticated()
-		             .requestMatchers(HttpMethod.DELETE, "/api/v1/tours/**").authenticated()
-		             
-		             .requestMatchers(HttpMethod.POST, "/api/v1/reviews").authenticated() // Viết review yêu cầu đăng nhập
-		             .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").authenticated() // Xóa review yêu cầu đăng nhập
-		             .requestMatchers("/api/v1/users/**").authenticated()
-		             .requestMatchers("/api/v1/bookings/**").authenticated()
-		             .anyRequest().denyAll() // Các yêu cầu khác bị từ chối
+//		             .requestMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll() // Public endpoints
+//		             .requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll() // Xem danh sách reviews công khai
+//
+//		             .requestMatchers(HttpMethod.POST, "/api/v1/tours").authenticated() // Yêu cầu đăng nhập
+//		             .requestMatchers(HttpMethod.PUT, "/api/v1/tours/**").authenticated()
+//		             .requestMatchers(HttpMethod.DELETE, "/api/v1/tours/**").authenticated()
+//		             
+//		             .requestMatchers(HttpMethod.POST, "/api/v1/reviews").authenticated() // Viết review yêu cầu đăng nhập
+//		             .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").authenticated() // Xóa review yêu cầu đăng nhập
+//		             .requestMatchers("/api/v1/users/**").authenticated()
+//		             .requestMatchers("/api/v1/bookings/**").authenticated()
+//		             .anyRequest().denyAll() // Các yêu cầu khác bị từ chối
+		 			 .anyRequest().permitAll()
 		         )
 		 	 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		 			 );
