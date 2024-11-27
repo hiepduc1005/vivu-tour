@@ -5,19 +5,20 @@ import com.tour.vn.dto.UserAuthResponse;
 import com.tour.vn.dto.UserCreate;
 import com.tour.vn.dto.UserResponse;
 import com.tour.vn.dto.UserUpdate;
+import com.tour.vn.entity.Role;
 import com.tour.vn.entity.User;
 import com.tour.vn.security.JWTGenerator;
+import com.tour.vn.service.RoleService;
 import com.tour.vn.service.UserService;
 import com.tour.vn.service.convert.UserConvert;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,18 +34,25 @@ public class UserController {
     private final JWTGenerator jwtGenerator;
     
     private final AuthenticationManager authenticationManager;
+    
+    private final RoleService roleService;
 
-    public UserController(UserService userService,UserConvert userConvert,JWTGenerator jwtGenerator, AuthenticationManager authenticationManager) {
+    public UserController(
+    		UserService userService,
+    		UserConvert userConvert,JWTGenerator jwtGenerator,
+    		AuthenticationManager authenticationManager,
+    		RoleService roleService) {
+    	
         this.userService = userService;
         this.userConvert = userConvert;
         this.jwtGenerator = jwtGenerator;
         this.authenticationManager = authenticationManager;
+        this.roleService = roleService;
     }
     
     @PostMapping("authenticate")
     public ResponseEntity<UserAuthResponse> authenticateUser(@RequestBody UserAuth userAuth) {
         try {
-            // Xác thực người dùng
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     userAuth.getEmail(),
@@ -60,6 +68,29 @@ public class UserController {
         } catch (Exception ex) {
             throw new RuntimeException("Authenticate failed!", ex);
         }
+    }
+    
+    @PostMapping("signup")
+    public ResponseEntity<UserResponse> signupUser(@RequestBody UserCreate userCreate){
+        String email = userCreate.getEmail();
+        User userCheck = userService.getUserByEmail(email);
+        
+        if(userCheck != null) {
+            // Trả về lỗi nếu email đã tồn tại
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
+        
+        // Tạo mới người dùng
+        User user = userConvert.convertToUserCreate(userCreate);
+        List<Role> roles = List.of(roleService.getRoleByName("USER"));
+        user.setRoles(roles);
+        
+        // Lưu người dùng vào cơ sở dữ liệu
+        user = userService.createUser(user);
+        
+        // Trả về phản hồi
+        UserResponse userResponse = new UserResponse(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse); // 201 CREATED
     }
 
 
