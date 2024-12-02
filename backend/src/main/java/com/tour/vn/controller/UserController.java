@@ -18,7 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
- import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -37,18 +38,23 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     
     private final RoleService roleService;
+    
+    private final PasswordEncoder passwordEncoder;
+
 
     public UserController(
     		UserService userService,
     		UserConvert userConvert,JWTGenerator jwtGenerator,
     		AuthenticationManager authenticationManager,
-    		RoleService roleService) {
+    		RoleService roleService,
+    		PasswordEncoder passwordEncoder) {
     	
         this.userService = userService;
         this.userConvert = userConvert;
         this.jwtGenerator = jwtGenerator;
         this.authenticationManager = authenticationManager;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
     
     @PostMapping("authenticate")
@@ -60,6 +66,7 @@ public class UserController {
                     userAuth.getPassword()
                 )
             );
+
 
             String email = authentication.getName();
 
@@ -85,6 +92,9 @@ public class UserController {
         User user = userConvert.convertToUserCreate(userCreate);
         List<Role> roles = List.of(roleService.getRoleByName("USER"));
         user.setRoles(roles);
+        
+        String hashPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashPassword);
         
         // Lưu người dùng vào cơ sở dữ liệu
         user = userService.createUser(user);
