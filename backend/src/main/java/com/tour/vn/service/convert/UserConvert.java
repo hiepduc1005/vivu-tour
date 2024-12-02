@@ -1,12 +1,14 @@
 package com.tour.vn.service.convert;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tour.vn.dto.UserCreate;
 import com.tour.vn.dto.UserUpdate;
 import com.tour.vn.entity.User;
 import com.tour.vn.service.RoleService;
 
+@Service
 public class UserConvert {
 	
 	@Autowired

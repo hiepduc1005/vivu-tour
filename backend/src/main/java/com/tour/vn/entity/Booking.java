@@ -1,6 +1,10 @@
 package com.tour.vn.entity;
 
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -31,9 +35,11 @@ public class Booking {
     private BookingStatus status;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
