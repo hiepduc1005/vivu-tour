@@ -1,5 +1,8 @@
 package com.tour.vn.service.convert;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +29,16 @@ public class UserConvert {
    
 
     // Chuyển UserUpdate DTO sang User Entity
-    public void convertToUserUpdate(User existUser, UserUpdate userUpdate) {
+    public User convertToUserUpdate(User existUser, UserUpdate userUpdate) {
     	existUser.setName(userUpdate.getName());
     	existUser.setEmail(userUpdate.getEmail());
     	existUser.setPhone(userUpdate.getPhone());
-    	existUser.setRoles(userUpdate.getRoleIds().stream().map(roleId ->  roleService.getRoleById(roleId)).toList());
+    	if (userUpdate.getRoleIds() != null) {
+        	existUser.setRoles(userUpdate.getRoleIds().stream().map(roleId ->  roleService.getRoleById(roleId)).collect(Collectors.toList()));
+
+    	}
         
+    	return existUser;
     }
 
    

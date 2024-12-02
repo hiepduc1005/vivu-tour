@@ -138,7 +138,8 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody UserUpdate userUpdate) {
         User existingUser = userService.getUserById(id);
-        userConvert.convertToUserUpdate(existingUser, userUpdate);
+        existingUser = userConvert.convertToUserUpdate(existingUser, userUpdate);
+        System.out.println(existingUser.getPhone() + " hello");
         User updatedUser = userService.updateUser(id, existingUser);
         UserResponse response = new UserResponse(updatedUser);
         return ResponseEntity.ok(response);
