@@ -10,6 +10,8 @@ import com.tour.vn.service.LocationService;
 import com.tour.vn.service.TourService;
 import com.tour.vn.service.convert.TourConvert;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +38,11 @@ public class TourController {
     }
 
     // Create a new tour (Admin-only endpoint)
-    @PostMapping(value = "/create", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/create", consumes = { "multipart/mixed" })
     public ResponseEntity<TourResponse> createTour(
     		@RequestPart("tour") TourCreate tour,
-    		@RequestPart("images") List<MultipartFile> images) {
+    		@RequestPart("images") List<MultipartFile> images,
+    		 HttpServletRequest request) {
     	
     	List<String> imagePaths = images.stream()
     			.map(image -> fileUploadService.saveFileToSever(image)).toList();
@@ -48,6 +51,8 @@ public class TourController {
     	
         Tour createdTour = tourService.createTour(tourConvert.tourCreateConvertToTour(tour));
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(createdTour);
+        System.out.println("Content-Type: " + request.getContentType());
+
         return ResponseEntity.ok(tourResponse);
     }
 

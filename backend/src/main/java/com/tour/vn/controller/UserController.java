@@ -8,6 +8,7 @@ import com.tour.vn.dto.UserUpdate;
 import com.tour.vn.entity.Role;
 import com.tour.vn.entity.User;
 import com.tour.vn.security.JWTGenerator;
+import com.tour.vn.security.SecurityConfig;
 import com.tour.vn.service.RoleService;
 import com.tour.vn.service.UserService;
 import com.tour.vn.service.convert.UserConvert;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -158,6 +160,15 @@ public class UserController {
         User user = userService.getUserByEmail(email);
         UserResponse response = new UserResponse(user);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/role")
+    public ResponseEntity<List<String>> getUserRoleByToken() {
+    	List<String> roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+    			.stream()
+    			.map(role -> role.getAuthority())
+    			.toList();
+        return ResponseEntity.ok(roles);
     }
     
     

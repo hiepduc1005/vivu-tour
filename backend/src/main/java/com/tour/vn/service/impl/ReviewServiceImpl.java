@@ -7,6 +7,7 @@ import com.tour.vn.repository.ReviewRepository;
 import com.tour.vn.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository reviewRepository;
 
     @Override
+    @Transactional
     public Review createReview(Review review) {
         review.setCreatedAt(LocalDateTime.now());
         review.setUpdatedAt(LocalDateTime.now());
@@ -26,16 +28,19 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Review getReviewById(Long id) {
         return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
     }
 
     @Override
+    @Transactional
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
 
     @Override
+    @Transactional
     public List<Review> getReviewsByTourId(Long tourId) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -43,16 +48,19 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public List<Review> getReviewsByUserId(Long userId) {
         return reviewRepository.findByUserId(userId);
     }
 
     @Override
+    @Transactional
     public void deleteReview(Long id) {
         reviewRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public List<Review> getReviewsByTourAndRatingGreaterThan(Long tourId, int minRating) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -62,11 +70,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public List<Review> getReviewsByCreatedAtBetween(LocalDateTime start, LocalDateTime end) {
         return reviewRepository.findByCreatedAtBetween(start, end);
     }
 
     @Override
+    @Transactional
     public double getAverageRatingForTour(Long tourId) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -77,6 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public long countReviewsByTour(Long tourId) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -84,6 +95,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> getBestReviewForTour(Long tourId) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -92,6 +104,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Optional<Review> getWorstReviewForTour(Long tourId) {
         Tour tour = new Tour();
         tour.setId(tourId);
@@ -100,6 +113,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public boolean hasUserReviewedTour(Long userId, Long tourId) {
         User user = new User();
         user.setId(userId);
@@ -109,6 +123,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public boolean isRatingInRange(Long tourId, int minRating, int maxRating) {
         Tour tour = new Tour();
         tour.setId(tourId);

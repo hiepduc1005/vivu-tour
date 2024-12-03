@@ -5,6 +5,7 @@ import com.tour.vn.entity.Tour;
 import com.tour.vn.repository.TourRepository;
 import com.tour.vn.service.TourService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,27 +21,32 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Transactional
     public Tour createTour(Tour tour) {
         // You can add additional logic for tour creation here
         return tourRepository.save(tour);
     }
 
     @Override
+    @Transactional
     public Tour updateTour( Tour tour) {
         return tourRepository.save(tour);
     }
 
     @Override
+    @Transactional
     public Optional<Tour> getTourById(Long id) {
         return tourRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public List<Tour> getAllTours() {
         return tourRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void deleteTour(Long id) {
         if (!tourRepository.existsById(id)) {
             throw new RuntimeException("Tour not found with id " + id);
@@ -49,6 +55,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Transactional
     public List<Tour> getToursByLocation(Location location) {
         return tourRepository.findByLocation(location);
     }
@@ -59,11 +66,13 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Transactional
     public List<Tour> searchTours(String searchKeyword) {
         return tourRepository.searchTours(searchKeyword);
     }
 
     @Override
+    @Transactional
     public boolean checkAvailability(Long tourId, int requiredSlots) {
         Optional<Tour> tour = tourRepository.findById(tourId);
         if (tour.isPresent()) {
@@ -73,6 +82,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Transactional
     public void updateAvailableSlots(Long tourId, int bookedSlots) {
         Optional<Tour> tour = tourRepository.findById(tourId);
         if (tour.isPresent()) {
@@ -86,11 +96,13 @@ public class TourServiceImpl implements TourService {
     }
     
     @Override
+    @Transactional
     public List<Tour> getToursByStartLocation(Location locationStart) {
         return tourRepository.findByLocationStart(locationStart);
     }
     
     @Override
+    @Transactional
     public List<Tour> getToursByStartDateAndLocation(LocalDateTime startDate, Location location){
     	return tourRepository.findByStartDateAndLocation(startDate, location);
     }
