@@ -10,7 +10,7 @@ import { createTour, getTours } from '../service/TourApi'
 
 const Homepage = () => {
     const [tours, setTours] = useState([]); // Khởi tạo state để lưu danh sách tour
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = localStorage.getItem('user');
     const naviage = useNavigate();
 
     const fetchListTour = async () => {

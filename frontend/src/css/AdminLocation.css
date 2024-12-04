@@ -1,0 +1,80 @@
+/* Đặt container chính cho form */
+.adminlocation-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    border-radius: 8px; /* Bo tròn các góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Tiêu đề của form */
+  .adminlocation-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333; /* Màu chữ đậm */
+    text-align: center;
+  }
+  
+  /* Nhóm form */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Label */
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555; /* Màu chữ nhạt */
+  }
+  
+  /* Input và Textarea */
+  .form-group input[type="text"],
+  .form-group textarea,
+  .form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc; /* Viền nhạt */
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+  }
+  
+  .form-group textarea {
+    resize: vertical; /* Cho phép thay đổi chiều cao */
+    min-height: 80px;
+  }
+  
+  /* Nút submit */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Màu nền xanh lá */
+    color: #fff; /* Chữ trắng */
+    font-size: 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #45a049; /* Đổi màu khi hover */
+  }
+  
+  /* Tin nhắn thành công */
+  .success-message {
+    color: #4CAF50; /* Màu xanh lá */
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Tin nhắn lỗi */
+  .error-message {
+    color: #f44336; /* Màu đỏ */
+    font-weight: bold;
+    text-align: center;
+  }
+  

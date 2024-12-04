@@ -11,12 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileUploadService {
 
-	private final String uploadDir = "upload/tours";
+	private final String uploadDir = "src/main/resources/static/uploads";
 	
 	public String saveFileToSever(MultipartFile file) {
 		try {
 			Path uploadPath = Paths.get(uploadDir);
-			if(Files.exists(uploadPath)) {
+			if(!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
 			
@@ -25,7 +25,7 @@ public class FileUploadService {
 
 			Files.write(filePath,file.getBytes());
 			
-			return "/uploads/tours/" + fileName;
+			return "/uploads/" + fileName;
 		} catch (Exception e) {
 			 throw new RuntimeException("Failed to save file: " + file.getOriginalFilename(), e);
 		}

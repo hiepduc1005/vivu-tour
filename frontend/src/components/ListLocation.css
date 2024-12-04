@@ -1,0 +1,100 @@
+/* Container Styling */
+.listlocation-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Error Message Styling */
+  .error-message {
+    color: #ff4d4d;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styling */
+  .location-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Centering content horizontally and vertically */
+  .location-table th,
+  .location-table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle; /* Vertically centers the content */
+    border: 1px solid #ddd;
+  }
+  
+  /* Header Styling */
+  .location-table th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .location-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .location-table tr:hover {
+    background-color: #ddd;
+  }
+  
+  /* Image Styling */
+  .location-table img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  
+  /* Action Button Styling */
+  .location-table button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  /* Update Button */
+  .location-table button.update {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }
+  
+  .location-table button.update:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+  }
+  
+  .location-table button.update:focus {
+    outline: none;
+  }
+  
+  /* Delete Button */
+  .location-table button.delete {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+  
+  .location-table button.delete:hover {
+    background-color: #e53935; /* Slightly darker red on hover */
+  }
+  
+  .location-table button.delete:focus {
+    outline: none;
+  }
+  

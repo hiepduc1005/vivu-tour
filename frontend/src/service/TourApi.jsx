@@ -1,12 +1,12 @@
 // src/api/tourApi.js
 import axiosInstance from "../ultils/axiosCustomize";
 
-const apiBaseUrl = "tourApi.php"; // Đường dẫn tới API
+const apiBaseUrl = "api/v1/tours"; // Đường dẫn tới API
 
 // Lấy danh sách tour
 export const getTours = async () => {
     try {
-        const response = await axiosInstance.get(`${apiBaseUrl}/tours`);
+        const response = await axiosInstance.get(`${apiBaseUrl}`);
         return response.data; // Trả về danh sách tour
     } catch (error) {
         console.error("Error fetching tours:", error);
@@ -17,7 +17,7 @@ export const getTours = async () => {
 // Xem thông tin tour theo ID
 export const getTourById = async (id) => {
     try {
-        const response = await axiosInstance.get(`${apiBaseUrl}/tours/${id}`);
+        const response = await axiosInstance.get(`${apiBaseUrl}/${id}`);
         return response.data; // Trả về dữ liệu tour
     } catch (error) {
         console.error("Error fetching tour:", error);
@@ -26,36 +26,50 @@ export const getTourById = async (id) => {
 };
 
 export const createTour = async (tourData) => {
-    const formData = new FormData(); // Sử dụng FormData để gửi tệp hình ảnh
+    const formData = new FormData();
 
-    // Thêm tất cả các trường vào FormData
-    Object.keys(tourData).forEach((key) => {
-        formData.append(key, tourData[key]);
+    // Thêm dữ liệu JSON của tour vào FormData
+    const tourJson = JSON.stringify({
+        name: tourData.name,
+        description: tourData.description,
+        prices: tourData.prices,
+        start_date: tourData.start_date,
+        end_date: tourData.end_date,
+        location_start: tourData.location_start,
+        location: tourData.location,
+        duration: tourData.duration,
+        available_slots: tourData.available_slots,
     });
+    formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
+
+    // Thêm danh sách hình ảnh vào FormData
+    if (tourData.images) {
+        tourData.images.forEach((image) => {
+            formData.append('images', image);
+        });
+    }
 
     try {
-        const response = await axiosInstance.post(`${apiBaseUrl}/tours`, formData, {
+        const response = await axiosInstance.post(`${apiBaseUrl}/create`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data', // Thiết lập header cho việc gửi tệp
+                'Content-Type': 'multipart/form-data',
             },
         });
-        return response.data; // Trả về dữ liệu tour vừa tạo
+        return response.data;
     } catch (error) {
         if (error.response) {
-            // Yêu cầu đã được gửi và server đã trả về mã trạng thái ngoài 2xx
             console.error("Error creating tour:", error.response.data);
             throw new Error(`Error ${error.response.status}: ${error.response.data.message || 'Unknown error'}`);
         } else if (error.request) {
-            // Yêu cầu đã được gửi nhưng không nhận được phản hồi
             console.error("Error creating tour: No response received", error.request);
             throw new Error("No response from server. Please try again later.");
         } else {
-            // Một lỗi khác đã xảy ra trong quá trình thiết lập yêu cầu
             console.error("Error creating tour:", error.message);
             throw new Error(`Request failed: ${error.message}`);
         }
     }
 };
+
 
 // Cập nhật thông tin tour
 export const updateTour = async (id, tourData) => {
@@ -65,7 +79,7 @@ export const updateTour = async (id, tourData) => {
     });
 
     try {
-        const response = await axiosInstance.put(`${apiBaseUrl}/tours/${id}`, formData, {
+        const response = await axiosInstance.put(`${apiBaseUrl}/${id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data', // Thiết lập header cho việc gửi tệp
             },
@@ -80,7 +94,7 @@ export const updateTour = async (id, tourData) => {
 // Xóa tour
 export const deleteTour = async (id) => {
     try {
-        const response = await axiosInstance.delete(`${apiBaseUrl}/tours/${id}`);
+        const response = await axiosInstance.delete(`${apiBaseUrl}/${id}`);
         return response.data; // Trả về dữ liệu kết quả xóa
     } catch (error) {
         console.error("Error deleting tour:", error);

@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import AdminUser from './pages/AdminUser';
 import AdminTour from './pages/AdminTour';
+import AdminLocation from './pages/AdminLocation';
 
 function App() {
 
@@ -20,6 +21,8 @@ function App() {
           <Route path="/admin"  >
               <Route index element={<AdminUser />} />
               <Route path='tour' element={<AdminTour/>} />
+              <Route path='location' element={<AdminLocation/>} />
+
             </Route>
           <Route path="/" element={<Layout />}>
             <Route index element={<Homepage />} />

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/locations")
+@RequestMapping("/api/v1/locations")
 public class LocationController {
 
     @Autowired

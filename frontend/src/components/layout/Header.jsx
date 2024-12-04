@@ -13,6 +13,7 @@ const Header = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
     naviage("/")
   }

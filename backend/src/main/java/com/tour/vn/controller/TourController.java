@@ -38,7 +38,7 @@ public class TourController {
     }
 
     // Create a new tour (Admin-only endpoint)
-    @PostMapping(value = "/create", consumes = { "multipart/mixed" })
+    @PostMapping(value = "/create", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<TourResponse> createTour(
     		@RequestPart("tour") TourCreate tour,
     		@RequestPart("images") List<MultipartFile> images,

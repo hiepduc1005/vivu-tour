@@ -10,13 +10,14 @@ const AdminUser = () => {
     const [error, setError] = useState(''); // State để lưu lỗi nếu có
 
     const user = JSON.parse(localStorage.getItem('user'));
-    const naviage = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
-      if(user.role !== "ADMIN"){
-        naviage("/");
-      }
-
+    if (user.roleResponses.some(role => role.name === "USER")) {
+        navigate('/'); // Điều hướng đến trang chính sau khi đăng nhập thành công
+    }else if (user.roleResponses.some(role => role.name === "ADMIN")) {
+            navigate('/admin'); // Điều hướng đến trang admin nếu người dùng là ADMIN
+    }
         const fetchUsers = async () => {
             try {
                 const userList = await getUsers(); // Gọi hàm getUsers để lấy danh sách người dùng

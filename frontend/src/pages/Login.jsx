@@ -1,7 +1,7 @@
 // src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nếu bạn sử dụng react-router để điều hướng
-import { loginUser } from '../service/UserApi'; // Import hàm gọi API
+import { loginUser,getUserRoleByToken,getUserByToken } from '../service/UserApi'; // Import hàm gọi API
 import '../css/Login.css'
 
 const Login = () => {
@@ -21,12 +21,19 @@ const Login = () => {
       };
       
       const res = await loginUser(userData); // Gọi hàm loginUser từ userApi
-      localStorage.setItem('user', JSON.stringify(res.user)); // Giả sử response chứa thông tin người dùng
-      if(res.user.role === "USER"){
-        navigate('/'); // Điều hướng đến trang chính sau khi đăng nhập thành công
-      }else {
-        navigate('/admin')
+      if(res){
+        const data = await getUserByToken(res.token);
+        if (data.roleResponses.some(role => role.name === "USER")) {
+          navigate('/'); // Điều hướng đến trang chính sau khi đăng nhập thành công
+        } else if (data.roleResponses.some(role => role.name === "ADMIN")) {
+            navigate('/admin'); // Điều hướng đến trang admin nếu người dùng là ADMIN
+        }
+        localStorage.setItem('user', JSON.stringify(data));
+
       }
+      localStorage.setItem('token', res.token);
+
+     
     } catch (err) {
       setError('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
       console.error(err); // Ghi lại lỗi trong console

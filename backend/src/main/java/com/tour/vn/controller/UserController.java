@@ -123,6 +123,14 @@ public class UserController {
         UserResponse response = new UserResponse(user);
         return ResponseEntity.ok(response);
     }
+    
+    @GetMapping("/authenticated")
+    public ResponseEntity<UserResponse> getUserAuth() {
+    	String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.getUserByEmail(email);
+        UserResponse response = new UserResponse(user);
+        return ResponseEntity.ok(response);
+    }
 
     // Lấy danh sách tất cả người dùng
     @GetMapping
