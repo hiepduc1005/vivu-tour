@@ -13,15 +13,8 @@ public class TourCreate {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private List<String> images; // Thêm ảnh
  
     
-	public List<String> getImages() {
-		return images;
-	}
-	public void setImages(List<String> images) {
-		this.images = images;
-	}
 	public String getName() {
 		return name;
 	}

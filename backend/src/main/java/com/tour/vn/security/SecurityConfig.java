@@ -82,7 +82,12 @@ public class SecurityConfig {
 			}
 			
 		
-			
+			@Override
+		    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		        // Cấu hình để phục vụ tài nguyên từ thư mục "uploads"
+		        registry.addResourceHandler("/uploads/**")
+		                .addResourceLocations("file:./src/main/resources/static/uploads/");
+		    }
 
 		};
 	}

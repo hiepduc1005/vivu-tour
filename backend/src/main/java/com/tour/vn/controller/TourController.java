@@ -47,9 +47,11 @@ public class TourController {
     	List<String> imagePaths = images.stream()
     			.map(image -> fileUploadService.saveFileToSever(image)).toList();
     	
-        tour.setImages(imagePaths);
     	
-        Tour createdTour = tourService.createTour(tourConvert.tourCreateConvertToTour(tour));
+        
+        Tour createdTour = tourConvert.tourCreateConvertToTour(tour);
+        createdTour.setImages(imagePaths);
+        createdTour = tourService.createTour(createdTour);
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(createdTour);
         System.out.println("Content-Type: " + request.getContentType());
 

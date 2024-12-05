@@ -34,7 +34,6 @@ public class TourConvert {
 	        tour.setLocationStart(startLocation);
 
 	        tour.setLocation(endLocation);
-	        tour.setImages(dto.getImages()); // Set ảnh
 
 	        
 	        return tour;

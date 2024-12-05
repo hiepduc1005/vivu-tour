@@ -28,24 +28,27 @@ export const getTourById = async (id) => {
 export const createTour = async (tourData) => {
     const formData = new FormData();
 
-    // Thêm dữ liệu JSON của tour vào FormData
+    // Định dạng JSON theo DTO của backend
     const tourJson = JSON.stringify({
         name: tourData.name,
         description: tourData.description,
-        prices: tourData.prices,
-        start_date: tourData.start_date,
-        end_date: tourData.end_date,
-        location_start: tourData.location_start,
-        location: tourData.location,
-        duration: tourData.duration,
-        available_slots: tourData.available_slots,
+        startLocationId: tourData.startLocationId,
+        endLocationId: tourData.endLocationId,
+        availableSlots: tourData.availableSlots,
+        pricePerPerson: tourData.pricePerPerson,
+        startDate: tourData.startDate, // Đảm bảo là ISO 8601 string
+        endDate: tourData.endDate,     // Đảm bảo là ISO 8601 string
     });
-    formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
 
-    // Thêm danh sách hình ảnh vào FormData
-    if (tourData.images) {
+    // Thêm JSON vào FormData
+    formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
+    console.log(tourData)
+    // Thêm hình ảnh vào FormData
+    if (tourData.images && tourData.images.length > 0) {
         tourData.images.forEach((image) => {
-            formData.append('images', image);
+            if (image instanceof File) {
+                formData.append('images', image);
+            }
         });
     }
 
@@ -57,15 +60,16 @@ export const createTour = async (tourData) => {
         });
         return response.data;
     } catch (error) {
+        // Xử lý lỗi
         if (error.response) {
             console.error("Error creating tour:", error.response.data);
-            throw new Error(`Error ${error.response.status}: ${error.response.data.message || 'Unknown error'}`);
+            throw new Error(`Server Error: ${error.response.status} - ${error.response.data.message || 'An error occurred.'}`);
         } else if (error.request) {
-            console.error("Error creating tour: No response received", error.request);
-            throw new Error("No response from server. Please try again later.");
+            console.error("No response received:", error.request);
+            throw new Error("No response received from the server. Please check your connection or try again later.");
         } else {
-            console.error("Error creating tour:", error.message);
-            throw new Error(`Request failed: ${error.message}`);
+            console.error("Request setup error:", error.message);
+            throw new Error(`Unexpected error: ${error.message}`);
         }
     }
 };
