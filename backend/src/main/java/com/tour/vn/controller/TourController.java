@@ -53,9 +53,17 @@ public class TourController {
         createdTour.setImages(imagePaths);
         createdTour = tourService.createTour(createdTour);
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(createdTour);
-        System.out.println("Content-Type: " + request.getContentType());
 
         return ResponseEntity.ok(tourResponse);
+    }
+    
+    @PostMapping(value = "/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<String> uploadSingleFileImage(
+    		@RequestPart("file") MultipartFile file){
+    	
+    	String imagePath = fileUploadService.saveFileToSever(file);
+    	
+    	return ResponseEntity.ok(imagePath);
     }
 
     // Update an existing tour (Admin-only endpoint)
@@ -67,10 +75,9 @@ public class TourController {
     	
     	List<String> imagePaths = images.stream()
     			.map(image -> fileUploadService.saveFileToSever(image)).toList();
-    	
-        tour.setImages(imagePaths);
-        
+    	        
     	Tour existingTour = tourService.getTourById(id).get();
+    	existingTour.setImages(imagePaths);
         Tour updatedTour = tourService.updateTour(tourConvert.tourUpdateConvertToTour(tour, existingTour));
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(updatedTour);
         return ResponseEntity.ok(tourResponse);

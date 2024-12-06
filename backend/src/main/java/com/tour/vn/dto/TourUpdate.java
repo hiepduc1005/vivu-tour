@@ -12,22 +12,23 @@ public class TourUpdate {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private List<String> images; // Thêm ảnh
-    private List<ScheduleUpdate> schedule;
+    private List<ScheduleUpdate> scheduleUpdate;
+    private List<ScheduleCreate> scheduleCreate;
     
     
-    
-	public List<ScheduleUpdate> getSchedule() {
-		return schedule;
+	
+	
+	public List<ScheduleUpdate> getScheduleUpdate() {
+		return scheduleUpdate;
 	}
-	public void setSchedule(List<ScheduleUpdate> schedule) {
-		this.schedule = schedule;
+	public void setScheduleUpdate(List<ScheduleUpdate> scheduleUpdate) {
+		this.scheduleUpdate = scheduleUpdate;
 	}
-	public List<String> getImages() {
-		return images;
+	public List<ScheduleCreate> getScheduleCreate() {
+		return scheduleCreate;
 	}
-	public void setImages(List<String> images) {
-		this.images = images;
+	public void setScheduleCreate(List<ScheduleCreate> scheduleCreate) {
+		this.scheduleCreate = scheduleCreate;
 	}
 	public String getName() {
 		return name;

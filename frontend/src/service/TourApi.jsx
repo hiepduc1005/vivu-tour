@@ -43,7 +43,7 @@ export const createTour = async (tourData) => {
 
     // Thêm JSON vào FormData
     formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
-    console.log(tourData)
+    
     // Thêm hình ảnh vào FormData
     if (tourData.images && tourData.images.length > 0) {
         tourData.images.forEach((image) => {
@@ -79,9 +79,33 @@ export const createTour = async (tourData) => {
 // Cập nhật thông tin tour
 export const updateTour = async (id, tourData) => {
     const formData = new FormData();
-    Object.keys(tourData).forEach((key) => {
-        formData.append(key, tourData[key]);
+
+    // Định dạng JSON theo DTO của backend
+    const tourJson = JSON.stringify({
+        name: tourData.name,
+        description: tourData.description,
+        startLocationId: tourData.startLocationId,
+        endLocationId: tourData.endLocationId,
+        availableSlots: tourData.availableSlots,
+        pricePerPerson: tourData.pricePerPerson,
+        startDate: tourData.startDate, // Đảm bảo là ISO 8601 string
+        endDate: tourData.endDate,  
+        scheduleUpdate: tourData.scheduleUpdate,
+        scheduleCreate: tourData.scheduleCreate    // Đảm bảo là array các schedule
     });
+
+    // Thêm JSON vào FormData
+    formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
+
+    console.log(tourData);
+    // Thêm hình ảnh vào FormData nếu có
+    if (tourData.images && tourData.images.length > 0) {
+        tourData.images.forEach((image) => {
+            if (image instanceof File) {
+                formData.append('images', image);
+            }
+        });
+    }
 
     try {
         const response = await axiosInstance.put(`${apiBaseUrl}/${id}`, formData, {
@@ -96,6 +120,7 @@ export const updateTour = async (id, tourData) => {
     }
 };
 
+
 // Xóa tour
 export const deleteTour = async (id) => {
     try {
@@ -106,3 +131,26 @@ export const deleteTour = async (id) => {
         throw error; // Ném lỗi để xử lý ở nơi gọi
     }
 };
+
+export const uploadSingleImage = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file); // Gắn file hình ảnh vào FormData
+  
+      const response = await axios.post(
+        `${apiBaseUrl}/image`, // Đường dẫn đến API upload
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Đặt header phù hợp
+          },
+        }
+      );
+  
+      // Trả về đường dẫn hình ảnh từ server
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi khi upload hình ảnh:', error);
+      throw error; // Ném lỗi ra ngoài để xử lý
+    }
+  };

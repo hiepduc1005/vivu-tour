@@ -258,7 +258,7 @@ const AdminTour = () => {
           <button type="submit">Tạo Tour</button>
         </form>
       </div>
-      <ListTours />
+      <ListTours locations={locations}/>
     </>
   );
 };

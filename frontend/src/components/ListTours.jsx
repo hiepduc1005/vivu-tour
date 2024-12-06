@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { deleteTour, getTours } from '../service/TourApi';
+import { deleteTour, getTours, updateTour } from '../service/TourApi';
 import './ListTours.css';
+import ModalUpdateTour from './modal/ModalUpdateTour';
+import dayjs from 'dayjs';
 
-const ListTours = () => {
+const ListTours = ({locations}) => {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const [selectedTour, setSelectedTour] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEdit = (tour) => {
+    setSelectedTour(tour);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdate = async (updatedTour) => {
+    const tourUpdated = await updateTour(updatedTour.id,updatedTour)
+    if(tourUpdated){
+      setTours((prev) =>
+        prev.map((tour) => (tour.id === tourUpdated.id ? tourUpdated : tour))
+      );
+    }
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa tour này không?')) {
@@ -79,7 +98,7 @@ const ListTours = () => {
                 </ul>
               </td>
               <td>
-                <button className="btn btn-edit">Edit</button>
+                <button className="btn btn-edit" onClick={() => handleEdit(tour)}>Edit</button>
                 <button
                   className="btn btn-delete"
                   onClick={() => handleDelete(tour.id)}
@@ -91,6 +110,13 @@ const ListTours = () => {
           ))}
         </tbody>
       </table>
+      <ModalUpdateTour
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        tourData={selectedTour}
+        onUpdate={handleUpdate}
+        locations={locations}
+      />
     </div>
   );
 };

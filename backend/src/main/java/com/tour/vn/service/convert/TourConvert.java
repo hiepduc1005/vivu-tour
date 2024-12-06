@@ -73,15 +73,23 @@ public class TourConvert {
 	    existingTour.setPrices(tourUpdate.getPricePerPerson());
 	    existingTour.setStartDate(tourUpdate.getStartDate());
 	    existingTour.setEndDate(tourUpdate.getEndDate());
-	    existingTour.setImages(tourUpdate.getImages());
 
 	    // Xử lý danh sách schedule
-	    List<Schedule> schedules = tourUpdate.getSchedule() != null
-	        ? tourUpdate.getSchedule().stream()
+	    List<Schedule> schedules = tourUpdate.getScheduleUpdate() != null
+	        ? tourUpdate.getScheduleUpdate().stream()
 	              .map(schedule -> scheduleConvert.scheduleUpdateConvertToSchedule(schedule, existingTour))
 	              .collect(Collectors.toList())
 	        : Collections.emptyList();
+	    
 	    existingTour.setSchedules(schedules);
+	    
+	    List<Schedule> schedulesCreate = tourUpdate.getScheduleCreate() != null
+		        ? tourUpdate.getScheduleCreate().stream()
+		              .map(schedule -> scheduleConvert.scheduleCreateConvertToSchedule(schedule, existingTour))
+		              .collect(Collectors.toList())
+		        : Collections.emptyList();
+	    
+		existingTour.getSchedules().addAll(schedulesCreate);
 
 	    return existingTour;
 	}
