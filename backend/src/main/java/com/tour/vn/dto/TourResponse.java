@@ -16,8 +16,17 @@ public class TourResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<String> images; // Thêm ảnh
+    private List<ScheduleResponse> schedules;
+    
+    
 
     
+	public List<ScheduleResponse> getSchedules() {
+		return schedules;
+	}
+	public void setSchedules(List<ScheduleResponse> schedules) {
+		this.schedules = schedules;
+	}
 	public List<String> getImages() {
 		return images;
 	}

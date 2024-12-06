@@ -37,7 +37,8 @@ export const createTour = async (tourData) => {
         availableSlots: tourData.availableSlots,
         pricePerPerson: tourData.pricePerPerson,
         startDate: tourData.startDate, // Đảm bảo là ISO 8601 string
-        endDate: tourData.endDate,     // Đảm bảo là ISO 8601 string
+        endDate: tourData.endDate, 
+        schedule: tourData.schedule    // Đảm bảo là ISO 8601 string
     });
 
     // Thêm JSON vào FormData

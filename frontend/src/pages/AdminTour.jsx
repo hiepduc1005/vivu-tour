@@ -17,14 +17,17 @@ const AdminTour = () => {
     startDate: '',
     endDate: '',
     images: [],
+    schedule: [], // Lưu danh sách lịch trình
   });
+  const [scheduleInputs, setScheduleInputs] = useState([
+    { day: '', activity: '' },
+  ]); // Nhiều input lịch trình
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    
     const fetchLocations = async () => {
       try {
         const listLocation = await getLocations(token);
@@ -46,8 +49,27 @@ const AdminTour = () => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    // const urls = files.map((file) => URL.createObjectURL(file));
     setFormData((prev) => ({ ...prev, images: files }));
+  };
+
+  // Thêm dòng input cho lịch trình
+  const addScheduleInput = () => {
+    setScheduleInputs((prev) => [...prev, { day: '', activity: '' }]);
+  };
+
+  // Xóa dòng input lịch trình
+  const removeScheduleInput = (index) => {
+    setScheduleInputs((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Cập nhật giá trị của các trường lịch trình
+  const handleScheduleChange = (index, e) => {
+    const { name, value } = e.target;
+    setScheduleInputs((prev) =>
+      prev.map((input, i) =>
+        i === index ? { ...input, [name]: value } : input
+      )
+    );
   };
 
   const handleCreateTour = async (e) => {
@@ -62,7 +84,8 @@ const AdminTour = () => {
       await createTour({ 
         ...formData, 
         startDate: formattedStartDate, 
-        endDate: formattedEndDate 
+        endDate: formattedEndDate,
+        schedule: scheduleInputs, // Gửi lịch trình động
       });
 
       resetForm();
@@ -83,12 +106,14 @@ const AdminTour = () => {
       startDate: '',
       endDate: '',
       images: [],
+      schedule: [],
     });
+    setScheduleInputs([{ day: '', activity: '' }]);
   };
 
   const refreshTours = async () => {
     try {
-      const tourList = await getTours();
+      await getTours();
     } catch {
       setError('Không thể làm mới danh sách tour.');
     }
@@ -103,6 +128,7 @@ const AdminTour = () => {
 
         <form onSubmit={handleCreateTour}>
           <h3>Tạo Tour Mới</h3>
+          {/* Thông tin cơ bản */}
           <div className="form-group">
             <input
               type="text"
@@ -182,8 +208,6 @@ const AdminTour = () => {
           </div>
           <div className="form-group">
             <input
-              min={1}
-              max={30}
               type="number"
               name="availableSlots"
               value={formData.availableSlots}
@@ -200,10 +224,41 @@ const AdminTour = () => {
               onChange={handleFileChange}
             />
           </div>
+
+          {/* Thêm lịch trình */}
+          <h3>Thêm Lịch Trình</h3>
+          {scheduleInputs.map((input, index) => (
+            <div key={index} className="schedule-row">
+              <input
+                type="number"
+                name="day"
+                placeholder="Ngày"
+                value={input.day}
+                onChange={(e) => handleScheduleChange(index, e)}
+                min={1}
+                max={30}
+                required
+              />
+              <textarea
+                name="activity"
+                placeholder="Hoạt động"
+                value={input.activity}
+                onChange={(e) => handleScheduleChange(index, e)}
+                required
+              />
+              <button type="button" onClick={() => removeScheduleInput(index)}>
+                Xóa
+              </button>
+            </div>
+          ))}
+          <button type="button" onClick={addScheduleInput}>
+            Thêm Lịch Trình
+          </button>
+
           <button type="submit">Tạo Tour</button>
         </form>
       </div>
-      <ListTours></ListTours>
+      <ListTours />
     </>
   );
 };

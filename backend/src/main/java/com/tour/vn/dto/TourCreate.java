@@ -13,8 +13,16 @@ public class TourCreate {
     private double pricePerPerson;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
- 
+    private List<ScheduleCreate> schedule;
     
+    
+    
+	public List<ScheduleCreate> getSchedule() {
+		return schedule;
+	}
+	public void setSchedule(List<ScheduleCreate> schedule) {
+		this.schedule = schedule;
+	}
 	public String getName() {
 		return name;
 	}

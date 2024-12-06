@@ -13,8 +13,16 @@ public class TourUpdate {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<String> images; // Thêm ảnh
-
+    private List<ScheduleUpdate> schedule;
     
+    
+    
+	public List<ScheduleUpdate> getSchedule() {
+		return schedule;
+	}
+	public void setSchedule(List<ScheduleUpdate> schedule) {
+		this.schedule = schedule;
+	}
 	public List<String> getImages() {
 		return images;
 	}

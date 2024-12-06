@@ -54,8 +54,21 @@ public class Tour {
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     private List<Review> reviews;
+    
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules;
+    
+    
 
-    // Getters and Setters
+    public List<Schedule> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
+	}
+
+	// Getters and Setters
     public List<String> getImages() {
         return images;
     }

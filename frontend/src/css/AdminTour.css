@@ -2,115 +2,178 @@
 
 /* Container styling */
 .admintour-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Title styling */
-  .admintour-container h2,
-  .admintour-container h3 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  /* Form styling */
-  .admintour-container form {
-    margin-bottom: 20px;
-  }
-  
-  .admintour-container .form-group {
-    margin-bottom: 10px;
-  }
-  
-  .admintour-container .form-group input[type="text"],
-  .admintour-container .form-group input[type="number"],
-  .admintour-container.form-group input[type="date"],
-  .admintour-container  .form-group input[type="file"],
-  .admintour-container .form-group select,
-  .admintour-container .form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 5px;
-  }
-  
-  .admintour-container .form-group textarea {
-    resize: vertical;
-  }
-  
-  .admintour-container button {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .admintour-container button:hover {
-    background-color: #45a049;
-  }
-  
-  .admintour-container .error {
-    color: red;
-    text-align: center;
-  }
-  
-  /* Table styling */
-  .admintour-container table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .admintour-container table, th, td {
-    border: 1px solid #ddd;
-  }
-  
-  .admintour-container th, td {
-    padding: 12px;
-    text-align: left;
-  }
-  
-  .admintour-container th {
-    background-color: #f2f2f2;
-    color: #333;
-  }
-  
-  .admintour-container tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .admintour-container tbody tr:hover {
-    background-color: #ddd;
-  }
-  
-  /* Action buttons styling */
-  .admintour-container button {
-    margin-right: 5px;
-  }
-  
-  .admintour-container button:nth-child(1) {
-    background-color: #FFA500; /* Edit button color */
-  }
-  
-  .admintour-container button:nth-child(2) {
-    background-color: #FF6347; /* Delete button color */
-  }
-  
-  .admintour-container button:nth-child(1):hover {
-    background-color: #e59400;
-  }
-  
-  .admintour-container button:nth-child(2):hover {
-    background-color: #e05341;
-  }
-  
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.admintour-container h2,
+.admintour-container h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.admintour-container h2 {
+  font-size: 2rem;
+  color: #4CAF50;
+}
+
+.admintour-container h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Form styling */
+.admintour-container form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admintour-container .form-group {
+  margin-bottom: 15px;
+}
+
+/* Input & Textarea styling */
+.admintour-container .form-group input[type="text"],
+.admintour-container .form-group input[type="number"],
+.admintour-container .form-group input[type="date"],
+.admintour-container .form-group input[type="file"],
+.admintour-container .form-group select,
+.admintour-container .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.admintour-container .form-group textarea {
+  resize: vertical;
+}
+
+.admintour-container input[type="file"] {
+  padding: 3px;
+}
+
+/* Button styling */
+.admintour-container button {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  margin: 10px 0;
+  align-self: center;
+}
+
+.admintour-container button:hover {
+  background-color: #45a049;
+}
+
+/* Error message styling */
+.admintour-container .error {
+  color: red;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Schedule section styling */
+.schedule-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.schedule-row input,
+.schedule-row textarea {
+  flex: 1;
+  min-width: 200px;
+}
+
+.schedule-row button {
+  background-color: #FF6347;
+  padding: 6px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  color: white;
+  margin-left: 10px;
+  border: none;
+}
+
+.schedule-row button:hover {
+  background-color: #e05341;
+}
+
+/* Table styling */
+.admintour-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admintour-container table, th, td {
+  border: 1px solid #ddd;
+}
+
+.admintour-container th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+.admintour-container th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.admintour-container tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.admintour-container tbody tr:hover {
+  background-color: #ddd;
+}
+
+/* Action buttons styling */
+.admintour-container .action-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.admintour-container .action-buttons button {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admintour-container .action-buttons button:nth-child(1) {
+  background-color: #FFA500; /* Edit button color */
+}
+
+.admintour-container .action-buttons button:nth-child(2) {
+  background-color: #FF6347; /* Delete button color */
+}
+
+.admintour-container .action-buttons button:hover {
+  background-color: #e59400;
+}
+
+.admintour-container .action-buttons button:nth-child(2):hover {
+  background-color: #e05341;
+}
