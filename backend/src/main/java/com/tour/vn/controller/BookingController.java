@@ -1,20 +1,30 @@
 package com.tour.vn.controller;
 
+import com.tour.vn.dto.BookingCreate;
+import com.tour.vn.dto.BookingResponse;
+import com.tour.vn.dto.BookingUpdate;
 import com.tour.vn.entity.Booking;
 import com.tour.vn.entity.BookingStatus;
 import com.tour.vn.service.BookingService;
+import com.tour.vn.service.convert.BookingConvert;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
+    
+    @Autowired
+    private BookingConvert bookingConvert;
 
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
@@ -22,58 +32,80 @@ public class BookingController {
 
     // Create a new booking
     @PostMapping("/create")
-    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
-        Booking createdBooking = bookingService.createBooking(booking);
-        return ResponseEntity.ok(createdBooking);
+    public ResponseEntity<BookingResponse> createBooking(@RequestBody BookingCreate bookingCreate) {
+    	Booking createdBooking = bookingConvert.bookingCreateConvertToBooking(bookingCreate);
+        createdBooking = bookingService.createBooking(createdBooking);
+        
+        BookingResponse bookingResponse = bookingConvert.bookingConvertToBookingResponse(createdBooking);
+        return ResponseEntity.ok(bookingResponse);
     }
 
     // Get a booking by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> getBookingById(@PathVariable Long id) {
+    public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id) {
         Booking booking = bookingService.getBookingById(id);
-        return ResponseEntity.ok(booking);
+        
+        BookingResponse bookingResponse = bookingConvert.bookingConvertToBookingResponse(booking);
+
+        return ResponseEntity.ok(bookingResponse);
     }
 
     // Get all bookings
     @GetMapping
-    public ResponseEntity<List<Booking>> getAllBookings() {
+    public ResponseEntity<List<BookingResponse>> getAllBookings() {
         List<Booking> bookings = bookingService.getAllBookings();
-        return ResponseEntity.ok(bookings);
+        
+	    List<BookingResponse> bookingResponses =  bookings.stream()
+	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+        return ResponseEntity.ok(bookingResponses);
     }
 
     // Update a booking
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(@PathVariable Long id, @RequestBody Booking booking) {
-        Booking updatedBooking = bookingService.updateBooking(id, booking);
-        return ResponseEntity.ok(updatedBooking);
+    public ResponseEntity<BookingResponse> updateBooking(@PathVariable Long id, @RequestBody BookingUpdate bookingUpdate) {
+    	Booking existedBooking = bookingService.getBookingById(id);
+    	existedBooking = bookingConvert.bookingUpdateConvertToBooking(existedBooking, bookingUpdate);
+        Booking updatedBooking = bookingService.updateBooking(id, existedBooking);
+        
+        BookingResponse response = bookingConvert.bookingConvertToBookingResponse(updatedBooking);
+        return ResponseEntity.ok(response);
     }
 
     // Delete a booking
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
         bookingService.deleteBooking(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     // Find bookings by status
-    @GetMapping("/status")
-    public ResponseEntity<List<Booking>> findBookingsByStatus(@RequestParam BookingStatus status) {
-        List<Booking> bookings = bookingService.findByStatus(status);
-        return ResponseEntity.ok(bookings);
+    @GetMapping("/status/{statusString}")
+    public ResponseEntity<List<BookingResponse>> findBookingsByStatus(@PathVariable String statusString) {
+        List<Booking> bookings = bookingService.findByStatus(BookingStatus.valueOf(statusString));
+        
+        List<BookingResponse> bookingResponses =  bookings.stream()
+    	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+        return ResponseEntity.ok(bookingResponses);
     }
 
     // Find bookings by user ID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Booking>> findByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<BookingResponse>> findByUserId(@PathVariable Long userId) {
         List<Booking> bookings = bookingService.findByUserId(userId);
-        return ResponseEntity.ok(bookings);
+        
+        List<BookingResponse> bookingResponses =  bookings.stream()
+    	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+        return ResponseEntity.ok(bookingResponses);
     }
 
     // Find bookings by tour ID
     @GetMapping("/tour/{tourId}")
-    public ResponseEntity<List<Booking>> findByTourId(@PathVariable Long tourId) {
+    public ResponseEntity<List<BookingResponse>> findByTourId(@PathVariable Long tourId) {
         List<Booking> bookings = bookingService.findByTourId(tourId);
-        return ResponseEntity.ok(bookings);
+        
+        List<BookingResponse> bookingResponses =  bookings.stream()
+    	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+        return ResponseEntity.ok(bookingResponses);
     }
 
     // Get total revenue for a specific tour
@@ -95,8 +127,8 @@ public class BookingController {
 
     // Count bookings by status
     @GetMapping("/count-by-status")
-    public ResponseEntity<Long> countBookingsByStatus(@RequestParam BookingStatus status) {
-        long count = bookingService.countBookingsByStatus(status);
+    public ResponseEntity<Long> countBookingsByStatus(@PathVariable String statusString) {
+        long count = bookingService.countBookingsByStatus(BookingStatus.valueOf(statusString));
         return ResponseEntity.ok(count);
     }
 
@@ -109,8 +141,10 @@ public class BookingController {
 
     // Get the last booking
     @GetMapping("/last")
-    public ResponseEntity<Optional<Booking>> getLastBooking() {
+    public ResponseEntity<BookingResponse> getLastBooking() {
         Optional<Booking> lastBooking = bookingService.getLastBooking();
-        return ResponseEntity.ok(lastBooking);
+        
+        BookingResponse bookingResponse = bookingConvert.bookingConvertToBookingResponse(lastBooking.get());
+        return ResponseEntity.ok(bookingResponse);
     }
 }

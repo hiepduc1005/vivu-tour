@@ -3,11 +3,13 @@ package com.tour.vn.service.impl;
 import com.tour.vn.entity.Booking;
 import com.tour.vn.entity.BookingStatus;
 import com.tour.vn.entity.PaymentStatus;
+import com.tour.vn.entity.Tour;
 import com.tour.vn.repository.BookingRepository;
 import com.tour.vn.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +19,13 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
-
+    
     @Override
     public Booking createBooking(Booking booking) {
+    	Tour tour = booking.getTour();
+    	Double total = BigDecimal.valueOf(booking.getNumPeople()).multiply(BigDecimal.valueOf(tour.getPrices())).doubleValue();
+    	booking.setTotalPrice(total);
+    	booking.setStatus(BookingStatus.PENDING);
         return bookingRepository.save(booking);
     }
 
