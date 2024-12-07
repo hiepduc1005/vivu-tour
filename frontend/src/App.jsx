@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import AdminUser from './pages/AdminUser';
 import AdminTour from './pages/AdminTour';
 import AdminLocation from './pages/AdminLocation';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
 
@@ -23,15 +24,16 @@ function App() {
               <Route path='tour' element={<AdminTour/>} />
               <Route path='location' element={<AdminLocation/>} />
 
-            </Route>
+          </Route>
           <Route path="/" element={<Layout />}>
             <Route index element={<Homepage />} />
             <Route path="dulich"  >
               <Route index element={<ListTour />} />
-              <Route path=":slug" element={<TourDetails />} />
+              <Route path=":id" element={<TourDetails />} />
             </Route>
            
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
     </Router>
   )

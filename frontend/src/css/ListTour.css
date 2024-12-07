@@ -1,132 +1,112 @@
-/* Main Container for ListTours */
-.list-tour-container {
+
+.list-tour-container{
     background-color: #ECF0F5;
-    padding: 20px;
-    border-radius: 8px;
 }
 
-/* Breadcrumb navigation */
-.breadcrumb {
-    display: flex;
-    padding: 15px 0;
-}
-
-.breadcrumb span {
+.breadcrumb span{
     font-size: 12px;
     color: #555863;
     margin-right: 8px;
     cursor: pointer;
 }
 
-/* Table Styling for the Tour List */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.breadcrumb{
+    display: flex;
+    padding: 15px 0px;
 }
 
-.table th, .table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.tour-list-wrap{
+    display: grid;
+    grid-template-columns: 3fr 10fr;
 }
 
-.table th {
-    background-color: #f4f4f4;
-    color: #003C71;
-}
-
-.table td {
+.panel-group{
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
     background-color: #fff;
+    border: solid 1px #ccc;
+    padding: 15px 15px 0px;
+}
+
+.panel-group .panel{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.panel-group .panel .panel-heading{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.panel-group .panel .panel-collapse{
+    display: flex;
+    flex-direction: column;
+    border-top: none;
+    padding: 10px 0;
     color: #3f3b3b;
+
 }
 
-/* Table Row Hover Effect */
-.table tr:hover {
-    background-color: #f9f9f9;
-}
-
-/* List Tour Header */
-.title {
-    color: #003C71;
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-/* Error Message */
-.error {
-    color: red;
+.panel-collapse span{
+    padding: 10px 0;
     font-size: 16px;
-    margin-bottom: 20px;
 }
 
-/* Schedule Styling */
-ul {
-    padding-left: 20px;
-    list-style-type: none;
-    margin: 0;
-}
-
-ul li {
-    padding: 5px 0;
-    font-size: 14px;
-}
-
-ul li strong {
-    font-weight: bold;
-}
-
-ul li:hover {
+.panel-collapse span:hover{
     cursor: pointer;
     color: #26bed6;
     font-weight: bold;
 }
 
-/* Action Buttons */
-.btn {
-    padding: 6px 12px;
-    font-size: 14px;
-    margin-right: 8px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+.tour-list-right{
+    margin-left: 30px;
 }
 
-.btn-edit {
-    background-color: #f0ad4e;
-    color: white;
+.tour-list-right .heading{
+    color: #003C71;
+    font-weight: bold;
+    font-size: 40px;
 }
 
-.btn-edit:hover {
-    background-color: #ec971f;
+.tour-list-right .description{
+    font-size: 16px;
+    font-weight: 400;
+    color: #3f3b3b;
+    line-height: 1.6;
+    margin-top: 5px;
+    display: block;
+    margin-bottom: 15px;
 }
 
-.btn-delete {
-    background-color: #d9534f;
-    color: white;
+.tour-list-right .extra{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.btn-delete:hover {
-    background-color: #c9302c;
+.tour-list-right .extra .total{
+    font-size: 24px;
+    line-height: 1.4;
+    color: #3f3b3b;
+    font-weight: normal;
+    display: inline-block;
+
 }
 
-/* Responsive Styling */
-@media (max-width: 768px) {
-    .tour-list-wrap {
-        display: block;
-    }
+.tour-list .tour-container{
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    margin-bottom: 30px;
 
-    .tour-list-right {
-        margin-left: 0;
-    }
+}
 
-    .table {
-        font-size: 12px;
-    }
+.tour-list .tour-container .img{
+    width: 300px;
+    height: 200px;
+    background-color: #fff;
 }

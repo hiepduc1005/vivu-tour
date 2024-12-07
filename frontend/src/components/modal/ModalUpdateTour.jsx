@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ModalUpdateTour.css'; // CSS cho modal
 import dayjs from 'dayjs';
+import { uploadSingleImage } from '../../service/TourApi';
 
 const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
   const [formData, setFormData] = useState({
@@ -28,7 +29,8 @@ const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
         endLocationId:tourData.endLocation.id,
         startDate: tourData.startDate.split('T')[0],
         endDate: tourData.endDate.split('T')[0],
-        schedule: tourData.schedules
+        schedule: tourData.schedules,
+        images: tourData.images
 
     });
       setScheduleInputs(tourData.schedules || []);
@@ -49,7 +51,6 @@ const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
       )
     );
 
-    console.log(scheduleInputs);
   };
 
   const handleImageFileChange = (index, e) => {
@@ -58,6 +59,8 @@ const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
       setImageFiles((prev) =>
         prev.map((image, i) => (i === index ? file : image))
       );
+
+
     }
   };
 
@@ -71,42 +74,61 @@ const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
 
   const addImageInput = () => {
     setImageFiles((prev) => [...prev, null]); // Thêm một vị trí cho hình ảnh mới
-  };
+  
+};
 
   const removeImageInput = (index) => {
     setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const formattedStartDate = dayjs(formData.startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss');
     const formattedEndDate = dayjs(formData.endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss');
-
-    const scheduleUpdate = scheduleInputs
-    .filter(scheduleItem => scheduleItem.id) // Chỉ giữ các schedule đã có id
-    .map(({ tourId, ...rest }) => ({
-      ...rest,
-      day: +rest.day, // Chuyển đổi day sang chuỗi
-    }));
   
-  const scheduleCreate = scheduleInputs
-    .filter(scheduleItem => !scheduleItem.id) // Chỉ giữ các schedule mới
-    .map(({ tourId, id, ...rest }) => ({
-      ...rest,
-      day:+rest.day, // Chuyển đổi day sang chuỗi
-    }));
-    
-    onUpdate({
+    const scheduleUpdate = scheduleInputs
+      .filter(scheduleItem => scheduleItem.id) // Chỉ giữ các schedule đã có id
+      .map(({ tourId, ...rest }) => ({
+        ...rest,
+        day: +rest.day, // Chuyển đổi day sang số
+      }));
+  
+    const scheduleCreate = scheduleInputs
+      .filter(scheduleItem => !scheduleItem.id) // Chỉ giữ các schedule mới
+      .map(({ tourId, id, ...rest }) => ({
+        ...rest,
+        day: +rest.day, // Chuyển đổi day sang số
+      }));
+  
+    try {
+      // Upload tất cả hình ảnh trước
+      const updatedImages = await Promise.all(
+        imageFiles.map(async (file) => {
+          if (file instanceof File) {
+            return await uploadSingleImage(file); // Upload file mới
+          }
+          return file; // Giữ nguyên file cũ (URL)
+        })
+      );
+  
+      // Gọi hàm onUpdate sau khi upload xong
+      onUpdate({
         ...formData,
-        images: imageFiles,
+        images: updatedImages, // Sử dụng danh sách hình ảnh đã upload
         startDate: formattedStartDate,
         endDate: formattedEndDate,
-        scheduleUpdate:scheduleUpdate,
-        scheduleCreate:scheduleCreate
-    });
-
-    onClose();
+        scheduleUpdate,
+        scheduleCreate,
+      });
+  
+      onClose();
+    } catch (error) {
+      console.error('Lỗi khi upload hình ảnh hoặc cập nhật dữ liệu:', error);
+      alert('Có lỗi xảy ra. Vui lòng thử lại!');
+    }
   };
+  
 
   if (!isOpen) return null;
 

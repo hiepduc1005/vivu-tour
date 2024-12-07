@@ -18,12 +18,15 @@ const ListTours = ({locations}) => {
   };
 
   const handleUpdate = async (updatedTour) => {
-    const tourUpdated = await updateTour(updatedTour.id,updatedTour)
+    let { endLocation, startLocation, schedules, schedule, id, ...tourDataUpdate } = updatedTour;
+
+    const tourUpdated = await updateTour(id,tourDataUpdate)
     if(tourUpdated){
       setTours((prev) =>
         prev.map((tour) => (tour.id === tourUpdated.id ? tourUpdated : tour))
       );
     }
+    console.log(tourUpdated)
   };
 
   const handleDelete = async (id) => {

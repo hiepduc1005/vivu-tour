@@ -33,14 +33,25 @@ export const createLocation = async (locationData) => {
     }
   };
 
+  export const updateLocation = async (id, locationData) => {
+    try {
+        const response = await axios.put(`${apiBaseUrl}/${id}`, locationData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        return response.data; // Dữ liệu trả về từ server
+      } catch (error) {
+        console.error("Error updating tour:", error);
+        throw error; // Đẩy lỗi để xử lý phía trên nếu cần
+      }
+};
+
+
   
   export const getLocations = async (token) => {
     try {
-      const response = await axios.get(apiBaseUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Sending the token in the Authorization header
-        },
-      });
+      const response = await axios.get(apiBaseUrl);
       return response.data; // Returning the data from the API response
     } catch (err) {
       console.error('Error fetching locations:', err);

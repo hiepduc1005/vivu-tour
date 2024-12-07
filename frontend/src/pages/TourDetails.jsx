@@ -1,18 +1,65 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../css/TourDetails.css'
 import { Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ImageTourDetailsCarousel from '../components/CarouselTourDetailsImage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCircle, faCircleInfo, faIcicles, faIcons, faLocation, faLocationDot, faPlus, faSubtract } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCircleInfo, faLocationDot, faPlus, faSubtract } from '@fortawesome/free-solid-svg-icons'
+import { getTourById } from '../service/TourApi';
+import ModalBooking from '../components/modal/ModalBooking';
 const TourDetails = () => {
   
+  const { id } = useParams();
+
+  const [tour,setTour] = useState()
+  const [listDate,setListDate] = useState([])
+  const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị modal
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const breadcrumbs = [
     { label: 'Home', path: '/' },
    
   ];
-  return (
+
+  function generateNextDays(numberOfDays) {
+    const today = new Date();
+    const result = [];
+  
+    for (let i = 1; i <= numberOfDays; i++) {
+      const nextDay = new Date(today);
+      nextDay.setDate(today.getDate() + i);
+      const formattedDate = `${nextDay.getDate()}/${nextDay.getMonth() + 1}`; // Định dạng ngày/tháng
+      result.push(formattedDate);
+    }
+  
+    return result;
+  }
+
+  const fetchTourById = async (tourId) => {
+    try{
+      const tourData = await getTourById(tourId);
+      if(tourData && tourData.status === 200){
+        setTour(tourData.data)
+      }else window.location = window.location.origin + "/error";
+    }catch{
+      window.location = window.location.origin + "/error";
+    }
+  }
+
+  useEffect(() => {
+    fetchTourById(id);
+    setListDate(generateNextDays(4));
+
+    
+  },[])
+
+  if(!tour){
+    return <div>Loading...</div>
+  }
+
+
+  return ( 
     <div className='tour-details-container body'>
       <div className="breadcrumb">
         <Breadcrumbs  aria-label="breadcrumbs" size="sm">
@@ -29,20 +76,20 @@ const TourDetails = () => {
         </Breadcrumbs>
       </div>
       <div className="tourname">
-        <h1>Tour Liên Tuyến Miền Bắc 6N5Đ: Hà Nội - Ninh Bình - Hạ Long - Vịnh Lan Hạ - Sapa - Fansipan</h1>
+        <h1>{tour.name}</h1>
       </div>
       <div className="tour-details">
         <div className="tour-details-left">
           <div className="carousel">
             <div className="img-container">
-              <img src="http://localhost:5173/src/assets/image/ivivu-kdl-trang-an-750x460.gif" alt="" />
+              <img src={`http://localhost:8080${tour.images[0]}`} alt="image" />
             </div>
           </div>
           <div className="tour-location-details">
             <div className="top">
               <div className="start-location">
                 <FontAwesomeIcon icon={faLocationDot} style={{marginRight:"8px"}}></FontAwesomeIcon>
-                <span>Khởi hành từ: <b>Hà Nội</b></span>
+                <span>Khởi hành từ: <b>{tour.startLocation.name}</b></span>
               </div>
               <div className="tour-code">
                 <span>Mã Tuor: <b>TO3016</b></span>
@@ -63,7 +110,7 @@ const TourDetails = () => {
 
           <div className="tour-experience">
             <div className="title"><b>Những trải nghiệm thú vị trong tour</b></div>
-            <div className="content">Khám phá vịnh Hạ Long trong hành trình 2 ngày 1 đêm trên du thuyền 6 sao Essence Grand, nơi bạn sẽ được tận hưởng dịch vụ đẳng cấp và chiêm ngưỡng cảnh quan thiên nhiên tuyệt đẹp. Trải nghiệm vẻ đẹp kỳ vĩ của những hòn đảo đá vôi, làn nước trong xanh, và các hang động bí ẩn. Trên du thuyền, bạn có thể tham gia chèo kayak, bơi lội, và thư giãn trên boong tàu ngắm hoàng hôn tuyệt đẹp. Thưởng thức ẩm thực tinh tế và tận hưởng không gian sang trọng, đây là chuyến đi lý tưởng để thư giãn và khám phá di sản thiên nhiên thế giới. Cùng iVIVU khám phá ngay hôm nay!</div>
+            <div className="content">{tour.description}</div>
           </div>
 
           <div className="tour-accordion">
@@ -72,64 +119,22 @@ const TourDetails = () => {
               <div className="see-all">Xem tất cả</div>
             </div>
             <div className="accordion-list">
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1-content"
-                  id="panel1-header"
-                >
-                  Ngày 1
-                </AccordionSummary>
-                <AccordionDetails>
-                Xe đón Quý Khách tại sân bay Nội Bài di chuyển về Khách sạn nhận phòng (Công ty sẽ bố trí xe đón theo lịch bay của Khách).
-                Tự do khám phá thủ đô Hà Nội với 36 Phố Phường, tham quan Hồ Hoàn Kiếm, cầu Thê Húc, chùa Trấn Quốc, Lăng Bác, Văn Miếu Quốc Tử Giám,… ( Quý Khách có thể thuê xe xích lô, xe điện hoặc thuê xe máy tự do khám phá thủ đô Hà Nội.) 
-                Lăng Chủ tịch Hồ Chí Minh.
-                Quý Khách tự do ăn tối. Thưởng thức ẩm thực phố cổ mang nét văn hóa của Hà Nội xưa như chả cá Lã Vọng, bún Thang, phở Lý Quốc Sư, phở cuốn Ngũ Xã,…
-                Tối: Ngủ đêm tại Khách sạn 3 sao phố cổ Hà Nội.
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel2-content"
-                  id="panel2-header"
-                >
-                  Ngày 2
-                </AccordionSummary>
-                <AccordionDetails>
-                Sáng: Quý khách dùng bữa sáng tại khách sạn. Xe và hướng dẫn viên đón Quý khách tại khách sạn, khởi hành đi Ninh Bình, cách Hà Nội 110km.
-
-                Tham quan Chùa Bái Đính với các công trình lớn như Điện thờ Tam Thế, Pháp Chủ, tượng Phật lớn nhất Đông Nam Á và hai quả chuông nặng 36 và 27 tấn.
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel2-content"
-                  id="panel2-header"
-                >
-                  Ngày 2
-                </AccordionSummary>
-                <AccordionDetails>
-                Sáng: Quý khách dùng bữa sáng tại khách sạn. Xe và hướng dẫn viên đón Quý khách tại khách sạn, khởi hành đi Ninh Bình, cách Hà Nội 110km.
-
-                Tham quan Chùa Bái Đính với các công trình lớn như Điện thờ Tam Thế, Pháp Chủ, tượng Phật lớn nhất Đông Nam Á và hai quả chuông nặng 36 và 27 tấn.
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel2-content"
-                  id="panel2-header"
-                >
-                  Ngày 2
-                </AccordionSummary>
-                <AccordionDetails>
-                Sáng: Quý khách dùng bữa sáng tại khách sạn. Xe và hướng dẫn viên đón Quý khách tại khách sạn, khởi hành đi Ninh Bình, cách Hà Nội 110km.
-
-                Tham quan Chùa Bái Đính với các công trình lớn như Điện thờ Tam Thế, Pháp Chủ, tượng Phật lớn nhất Đông Nam Á và hai quả chuông nặng 36 và 27 tấn.
-                </AccordionDetails>
-              </Accordion>
+              {tour?.schedules?.map((schedule,index) => {
+                return (
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                    >
+                    Ngày {schedule.day}
+                    </AccordionSummary>
+                    <AccordionDetails>
+                    {schedule.activity}
+                    </AccordionDetails>
+                  </Accordion>
+                )
+              })}
           
             </div>
           </div>
@@ -141,18 +146,18 @@ const TourDetails = () => {
           <div className="main">
             <div className="title">Chọn Lịch Trình và Xem Giá:</div>
             <div className="list-tour-date">
-              <div className="item">01/11</div>
-              <div className="item">02/11</div>
-              <div className="item">03/11</div>
-              <div className="item">04/11</div>
+              {listDate && listDate?.map((date,index) => (
+                  <div key={`date${index}`} className="item">{date}</div>
+              ))}
+            
             </div>
             <div className="price-person">
               <div className="row1">
                 <div className="target">Người lớn</div>
-                <div className="age">&gt; 9</div>
+                <div className="age">&gt; 9 tuổi</div>
               </div>
               <div className="row2">
-                <b>x 3.400.000</b>
+                <b>x {tour.pricePerPerson}</b>
               </div>
               <div className="row3">
                 <FontAwesomeIcon icon={faPlus} style={{fontSize:"12px",cursor:"pointer"}}></FontAwesomeIcon>
@@ -168,15 +173,24 @@ const TourDetails = () => {
           <div className="bottom">
             <div className="total-price">
               <div className="content">Tổng Giá Tour</div>
-              <div className="price-number">27.200.000<span className='currency'>VND</span></div>
+              <div className="price-number">{tour.pricePerPerson}<span className='currency'>VND</span></div>
             </div>
             <div className="button-book-tour">
-               <button className="button-contact">Liên hệ tư vấn</button>
-               <button className="button-book">Đặt tour ngay</button>
+               {/* <button className="button-contact"></button> */}
+               <button 
+                  className="button-book" 
+                  style={{justifyContent: "flex-end"}}
+                  onClick={() => setShowModal(true)}> Yêu cầu đặt</button>
             </div>
           </div>
         </div>
       </div>
+      {showModal && (
+        <ModalBooking
+          user={user} // Truyền thông tin người dùng đã đăng nhập
+          onClose={() => setShowModal(false)} // Hàm đóng modal
+        />
+      )}
     </div>
   )
 }

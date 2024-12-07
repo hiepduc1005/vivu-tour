@@ -1,0 +1,110 @@
+/* Modal Overlay */
+.modal-location .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal Content */
+  .modal-location .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Modal Title */
+  .modal-location .modal-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Form Fields */
+  .modal-location .modal-field {
+    margin-bottom: 15px;
+  }
+  
+  .modal-location .modal-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .modal-location .modal-input, .modal-textarea, .modal-file-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  .modal-location .modal-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .modal-location .modal-file-input {
+    padding: 5px;
+  }
+  
+  /* Image Preview */
+  .modal-location .image-preview {
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .modal-location .preview-text {
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  
+  .modal-location .preview-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 5px;
+  }
+  
+  /* Modal Actions (Buttons) */
+  .modal-location .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .modal-location .cancel-button, .save-button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .modal-location .cancel-button {
+    background-color: #f44336 !important;
+    color: white;
+  }
+  
+  .modal-location .save-button {
+    background-color: #4caf50 !important;
+    color: white;
+  }
+  
+  .modal-location .cancel-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .modal-location .save-button:hover {
+    background-color: #388e3c;
+  }
+  

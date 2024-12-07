@@ -15,10 +15,8 @@ const Homepage = () => {
 
     const fetchListTour = async () => {
         try {
-            const response = getTours(); // Thay 'API_URL_HERE' bằng URL API thật
-            if (!response.ok) throw new Error('Failed to fetch tours'); // Kiểm tra phản hồi từ server
-            const data = await response.json(); // Chuyển đổi dữ liệu trả về sang định dạng JSON
-            setTours(data); // Cập nhật state với dữ liệu tour
+            const response = await getTours(); // Thay 'API_URL_HERE' bằng URL API thật
+            setTours(response); // Cập nhật state với dữ liệu tour
         } catch (error) {
             console.error('Error fetching tours:', error); // Xử lý lỗi nếu có
         }

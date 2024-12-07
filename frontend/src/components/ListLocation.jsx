@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getLocations, deleteLocation } from '../service/LocationApi'; // Assuming you have an API function to delete locations
+import { getLocations, deleteLocation, updateLocation } from '../service/LocationApi'; // Assuming you have an API function to delete locations
 import './ListLocation.css';
+import ModalUpdateLocation from './modal/ModalUpdateLocation';
 
 const ListLocation = () => {
   const [locations, setLocations] = useState([]);
   const [error, setError] = useState('');
-
+  const [selectedLocation, setSelectedLocation] = useState(null);  // Track the selected location
+  const [isModalOpen, setIsModalOpen] = useState(false);  // Modal visibility state
+ 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -36,9 +39,24 @@ const ListLocation = () => {
 
   const handleUpdate = (id) => {
     // Handle the update action (e.g., navigate to the update page or show a modal)
-    console.log(`Update location with ID: ${id}`);
-    // Example: Redirect to a location update page
-    // history.push(`/update-location/${id}`);
+    let locationToUpdate = locations.find(location => location.id === id);
+    setSelectedLocation(locationToUpdate);
+    setIsModalOpen(true);  // Open the modal
+  };
+  
+  const handleSaveUpdate = async (updatedLocation,id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const locationUpdated = await updateLocation(id, updatedLocation);
+      setLocations(locations.map(location => location.id === locationUpdated.id ? locationUpdated : location));
+    } catch (err) {
+      setError('Failed to update location.');
+      console.error('Error:', err);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);  // Close modal
   };
 
   return (
@@ -76,6 +94,14 @@ const ListLocation = () => {
           ))}
         </tbody>
       </table>
+
+      {isModalOpen && selectedLocation && (
+        <ModalUpdateLocation
+          location={selectedLocation} 
+          onClose={closeModal} 
+          onSave={handleSaveUpdate} 
+        />
+      )}
     </div>
   );
 };

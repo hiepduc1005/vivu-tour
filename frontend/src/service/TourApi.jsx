@@ -18,7 +18,7 @@ export const getTours = async () => {
 export const getTourById = async (id) => {
     try {
         const response = await axiosInstance.get(`${apiBaseUrl}/${id}`);
-        return response.data; // Trả về dữ liệu tour
+        return response; // Trả về dữ liệu tour
     } catch (error) {
         console.error("Error fetching tour:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi
@@ -78,46 +78,17 @@ export const createTour = async (tourData) => {
 
 // Cập nhật thông tin tour
 export const updateTour = async (id, tourData) => {
-    const formData = new FormData();
-
-    // Định dạng JSON theo DTO của backend
-    const tourJson = JSON.stringify({
-        name: tourData.name,
-        description: tourData.description,
-        startLocationId: tourData.startLocationId,
-        endLocationId: tourData.endLocationId,
-        availableSlots: tourData.availableSlots,
-        pricePerPerson: tourData.pricePerPerson,
-        startDate: tourData.startDate, // Đảm bảo là ISO 8601 string
-        endDate: tourData.endDate,  
-        scheduleUpdate: tourData.scheduleUpdate,
-        scheduleCreate: tourData.scheduleCreate    // Đảm bảo là array các schedule
-    });
-
-    // Thêm JSON vào FormData
-    formData.append('tour', new Blob([tourJson], { type: 'application/json' }));
-
-    console.log(tourData);
-    // Thêm hình ảnh vào FormData nếu có
-    if (tourData.images && tourData.images.length > 0) {
-        tourData.images.forEach((image) => {
-            if (image instanceof File) {
-                formData.append('images', image);
-            }
-        });
-    }
-
     try {
-        const response = await axiosInstance.put(`${apiBaseUrl}/${id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Thiết lập header cho việc gửi tệp
-            },
+        const response = await axiosInstance.put(`${apiBaseUrl}/${id}`, tourData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
-        return response.data; // Trả về dữ liệu tour đã cập nhật
-    } catch (error) {
+        return response.data; // Dữ liệu trả về từ server
+      } catch (error) {
         console.error("Error updating tour:", error);
-        throw error; // Ném lỗi để xử lý ở nơi gọi
-    }
+        throw error; // Đẩy lỗi để xử lý phía trên nếu cần
+      }
 };
 
 
@@ -137,7 +108,7 @@ export const uploadSingleImage = async (file) => {
       const formData = new FormData();
       formData.append('file', file); // Gắn file hình ảnh vào FormData
   
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${apiBaseUrl}/image`, // Đường dẫn đến API upload
         formData,
         {
