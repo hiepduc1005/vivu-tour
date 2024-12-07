@@ -8,7 +8,9 @@ import com.tour.vn.dto.BookingResponse;
 import com.tour.vn.dto.BookingUpdate;
 import com.tour.vn.entity.Booking;
 import com.tour.vn.entity.BookingStatus;
+import com.tour.vn.entity.User;
 import com.tour.vn.service.TourService;
+import com.tour.vn.service.UserService;
 
 @Service
 public class BookingConvert {
@@ -16,8 +18,16 @@ public class BookingConvert {
 	@Autowired
 	private TourService tourService;
 	
+	@Autowired
+	private UserService userService;
+	
 	public Booking bookingCreateConvertToBooking(BookingCreate bookingCreate) {
         Booking booking = new Booking();
+		if(bookingCreate.getUserId() != null) {
+			User user = userService.getUserById(bookingCreate.getUserId());
+	        booking.setUser(user);
+		}
+        booking.setBookingDate(bookingCreate.getBookingDate());
         booking.setEmail(bookingCreate.getEmail());
         booking.setPhone(bookingCreate.getPhone());
         booking.setUsername(bookingCreate.getUsername());
@@ -40,6 +50,7 @@ public class BookingConvert {
     public BookingResponse bookingConvertToBookingResponse(Booking booking) {
         BookingResponse response = new BookingResponse();
         response.setId(booking.getId());
+        response.setTotalPrice(booking.getTotalPrice());
         response.setEmail(booking.getEmail());
         response.setPhone(booking.getPhone());
         response.setUsername(booking.getUsername());

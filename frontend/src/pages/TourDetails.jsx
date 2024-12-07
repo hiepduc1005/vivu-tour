@@ -14,6 +14,10 @@ const TourDetails = () => {
   const [tour,setTour] = useState()
   const [listDate,setListDate] = useState([])
   const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị modal
+  const [quantity, setQuantity]  = useState(1);
+  const [totalPrice,setTotalPrice] = useState();
+  const [dateSelected,setDateSelected] = useState();
+  const [dateSelectedIndex,setDateSelectedIndex] = useState();
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -21,6 +25,35 @@ const TourDetails = () => {
     { label: 'Home', path: '/' },
    
   ];
+
+  const handleAdd = () => {
+    if(quantity <= 30){
+      setQuantity(pre => pre + 1);
+    }
+  }
+
+  const handleDelete = () => {
+    if(quantity > 1){
+      setQuantity(pre => pre - 1)
+    }
+  }
+
+  const handleDateClick = (date,index) => {
+    // Tách ngày và tháng từ chuỗi "dd/mm"
+    const [day, month] = date.split('/');
+    
+    // Lấy năm hiện tại
+    const year = new Date().getFullYear();
+    
+    // Tạo một đối tượng Date với ngày, tháng và năm hiện tại
+    const selectedDate = new Date(year, month - 1, day); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
+    
+    // Chuyển đổi ngày thành định dạng ISO 8601 (YYYY-MM-DD)
+    const isoDate = selectedDate.toISOString(); // Lấy phần YYYY-MM-DD
+    setDateSelected(isoDate); 
+    setDateSelectedIndex(index);
+  }
+  
 
   function generateNextDays(numberOfDays) {
     const today = new Date();
@@ -48,11 +81,16 @@ const TourDetails = () => {
   }
 
   useEffect(() => {
+    if (tour) {
+      setTotalPrice(quantity * tour.pricePerPerson);
+    }
+  }, [quantity, tour]);
+
+  useEffect(() => {
     fetchTourById(id);
     setListDate(generateNextDays(4));
-
-    
   },[])
+
 
   if(!tour){
     return <div>Loading...</div>
@@ -146,11 +184,17 @@ const TourDetails = () => {
           <div className="main">
             <div className="title">Chọn Lịch Trình và Xem Giá:</div>
             <div className="list-tour-date">
-              {listDate && listDate?.map((date,index) => (
-                  <div key={`date${index}`} className="item">{date}</div>
+              {listDate && listDate?.map((date, index) => (
+                <div
+                  key={`date${index}`}
+                  onClick={() => handleDateClick(date,index)}
+                  className={`item ${dateSelectedIndex === index ? 'selected' : ''}`}
+                >
+                  {date}
+                </div>
               ))}
-            
             </div>
+
             <div className="price-person">
               <div className="row1">
                 <div className="target">Người lớn</div>
@@ -160,9 +204,9 @@ const TourDetails = () => {
                 <b>x {tour.pricePerPerson}</b>
               </div>
               <div className="row3">
-                <FontAwesomeIcon icon={faPlus} style={{fontSize:"12px",cursor:"pointer"}}></FontAwesomeIcon>
-                <div className="quantity">1</div>
-                <FontAwesomeIcon icon={faSubtract} style={{fontSize:"12px",cursor:"pointer"}}></FontAwesomeIcon>
+                <FontAwesomeIcon onClick={() => handleAdd()} icon={faPlus} style={{fontSize:"12px",cursor:"pointer"}}></FontAwesomeIcon>
+                <div className="quantity">{quantity}</div>
+                <FontAwesomeIcon onClick={() => handleDelete()} icon={faSubtract} style={{fontSize:"12px",cursor:"pointer"}}></FontAwesomeIcon>
               </div>
             </div>
             <div className="warning">
@@ -173,7 +217,7 @@ const TourDetails = () => {
           <div className="bottom">
             <div className="total-price">
               <div className="content">Tổng Giá Tour</div>
-              <div className="price-number">{tour.pricePerPerson}<span className='currency'>VND</span></div>
+              <div className="price-number">{totalPrice}<span className='currency'>VND</span></div>
             </div>
             <div className="button-book-tour">
                {/* <button className="button-contact"></button> */}
@@ -187,6 +231,9 @@ const TourDetails = () => {
       </div>
       {showModal && (
         <ModalBooking
+          dateSelected={dateSelected}
+          quantity={quantity}
+          tour = {tour}
           user={user} // Truyền thông tin người dùng đã đăng nhập
           onClose={() => setShowModal(false)} // Hàm đóng modal
         />

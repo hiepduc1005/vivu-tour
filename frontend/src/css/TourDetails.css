@@ -103,6 +103,7 @@
     border-radius: 4px;
     padding: 20px 15px;
     height: fit-content;
+    user-select: none;
 }
 
 .tour-details-right .heading h3{
@@ -175,6 +176,7 @@
 
 .price-person .row3 .quantity{
     margin: 0 28px;
+    user-select: none;
 }
 .tour-details-right .main{
     margin-bottom: 20px;
@@ -186,6 +188,8 @@
     font-size: 16px;
     margin-bottom: 5px;
     padding: 5px 0px;
+    user-select: none;
+
 }
 
 .tour-details-right .bottom .total-price{
@@ -194,6 +198,8 @@
     margin-bottom: 10px;
     justify-content: space-between;
     align-items: center;
+    user-select: none;
+
 }
 
 .bottom .total-price .price-number{
@@ -235,3 +241,9 @@
     background-color: #f79321;
     color: #fff;
 }
+
+
+.item.selected {
+    border: 2px solid #26bed6; /* Hoặc bất kỳ màu sắc nào bạn muốn */
+    border-radius: 5px;
+  }

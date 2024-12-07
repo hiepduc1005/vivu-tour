@@ -1,13 +1,32 @@
 package com.tour.vn.dto;
 
+import java.time.LocalDateTime;
+
 public class BookingCreate {
+	private Long userId;
 	private String email;
 	private String phone;
 	private String username;
     private Long tourId;
     private int numPeople;
     private String additionalRequest; 
+    private LocalDateTime bookingDate;
+    
+    
+    
 	
+	public LocalDateTime getBookingDate() {
+		return bookingDate;
+	}
+	public void setBookingDate(LocalDateTime bookingDate) {
+		this.bookingDate = bookingDate;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 	public String getEmail() {
 		return email;
 	}
