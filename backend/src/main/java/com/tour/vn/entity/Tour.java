@@ -17,6 +17,8 @@ public class Tour {
     private Long id;
 
     private String name;
+    
+    @Column(columnDefinition = "TEXT") // Sử dụng TEXT cho cơ sở dữ liệu hỗ trợ
     private String description;
     private double prices;
     private LocalDateTime startDate;
@@ -55,7 +57,8 @@ public class Tour {
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     private List<Review> reviews;
     
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
+    @OrderBy("day ASC") // Sắp xếp theo trường 'day' tăng dần
     private List<Schedule> schedules;
     
     

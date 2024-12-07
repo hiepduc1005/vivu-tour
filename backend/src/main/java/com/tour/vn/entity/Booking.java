@@ -21,6 +21,12 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "tour_id")
     private Tour tour;
+    
+    private String email;
+    
+    private String username;
+    
+    private String phone;
 
     @Column(name = "booking_date")
     private LocalDateTime bookingDate;
@@ -30,6 +36,9 @@ public class Booking {
 
     @Column(name = "total_price")
     private double totalPrice;
+    
+    @Column(name = "additional_request" , columnDefinition = "text")
+    private String additionalRequest; 
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
@@ -44,8 +53,42 @@ public class Booking {
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Payment payment;
+    
+    
 
-    // Getters và Setters
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAdditionalRequest() {
+		return additionalRequest;
+	}
+
+	public void setAdditionalRequest(String additionalRequest) {
+		this.additionalRequest = additionalRequest;
+	}
+
+	// Getters và Setters
     public Long getId() {
         return id;
     }

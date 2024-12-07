@@ -40,6 +40,7 @@ public class LocationServiceImpl implements LocationService{
 		Location location =  getLocationById(id);	
 		location.setName(locationDetails.getName());
         location.setDescription(locationDetails.getDescription());
+        location.setImagePath(locationDetails.getImagePath());
         return locationRepository.save(location);
 	}
 

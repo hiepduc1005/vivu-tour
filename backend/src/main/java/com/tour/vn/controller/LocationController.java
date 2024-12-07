@@ -62,13 +62,10 @@ public class LocationController {
     @PutMapping("/{id}")
     public ResponseEntity<LocationResponse> updateLocation(
     		@PathVariable(name = "id") Long id,
-    		@RequestPart("locationUpdate") LocationUpdate locationUpdate,
-    		@RequestPart("file") MultipartFile file) {
+    		@RequestBody LocationUpdate locationUpdate) {
     	
-    	String imagePath = fileUploadService.saveFileToSever(file);
-    	locationUpdate.setImagePath(imagePath);
         Location location = locationConvert.toEntityFromUpdate(locationUpdate);
-           Location updatedLocation = locationService.updateLocation(id, location);
+        Location updatedLocation = locationService.updateLocation(id, location);
         LocationResponse updatedLocationResponse = locationConvert.toLocationResponse(updatedLocation);
         return ResponseEntity.ok(updatedLocationResponse);
     }

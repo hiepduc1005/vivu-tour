@@ -67,17 +67,13 @@ public class TourController {
     }
 
     // Update an existing tour (Admin-only endpoint)
-    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PutMapping(value = "/{id}")
     public ResponseEntity<TourResponse> updateTour(
     		@PathVariable Long id,
-    		@RequestPart("tour") TourUpdate tour,
-    		@RequestPart("images") List<MultipartFile> images) {
+    		@RequestBody TourUpdate tour) {
     	
-    	List<String> imagePaths = images.stream()
-    			.map(image -> fileUploadService.saveFileToSever(image)).toList();
-    	        
+     	        
     	Tour existingTour = tourService.getTourById(id).get();
-    	existingTour.setImages(imagePaths);
         Tour updatedTour = tourService.updateTour(tourConvert.tourUpdateConvertToTour(tour, existingTour));
         TourResponse tourResponse = tourConvert.tourConvertToTourResponse(updatedTour);
         return ResponseEntity.ok(tourResponse);

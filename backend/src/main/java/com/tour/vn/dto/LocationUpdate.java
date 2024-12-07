@@ -1,7 +1,6 @@
 package com.tour.vn.dto;
 
 public class LocationUpdate {
-
     private String name;
     private String description;
     private String imagePath;  // Đường dẫn ảnh

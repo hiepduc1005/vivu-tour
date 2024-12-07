@@ -1,14 +1,36 @@
 package com.tour.vn.dto;
 
 public class BookingCreate {
-	private Long userId;
+	private String email;
+	private String phone;
+	private String username;
     private Long tourId;
     private int numPeople;
-	public Long getUserId() {
-		return userId;
+    private String additionalRequest; 
+	
+	public String getEmail() {
+		return email;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getAdditionalRequest() {
+		return additionalRequest;
+	}
+	public void setAdditionalRequest(String additionalRequest) {
+		this.additionalRequest = additionalRequest;
 	}
 	public Long getTourId() {
 		return tourId;

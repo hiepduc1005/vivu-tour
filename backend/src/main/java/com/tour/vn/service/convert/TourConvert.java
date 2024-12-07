@@ -73,6 +73,7 @@ public class TourConvert {
 	    existingTour.setPrices(tourUpdate.getPricePerPerson());
 	    existingTour.setStartDate(tourUpdate.getStartDate());
 	    existingTour.setEndDate(tourUpdate.getEndDate());
+	    existingTour.setImages(tourUpdate.getImages());
 
 	    // Xử lý danh sách schedule
 	    List<Schedule> schedules = tourUpdate.getScheduleUpdate() != null
