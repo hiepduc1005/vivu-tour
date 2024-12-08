@@ -81,7 +81,7 @@ public class ReviewServiceImpl implements ReviewService {
         Tour tour = new Tour();
         tour.setId(tourId);
         return reviewRepository.findByTour(tour).stream()
-                .mapToInt(Review::getRating)
+                .mapToDouble(Review::getRating)
                 .average()
                 .orElse(0.0);
     }
@@ -100,7 +100,7 @@ public class ReviewServiceImpl implements ReviewService {
         Tour tour = new Tour();
         tour.setId(tourId);
         return reviewRepository.findByTour(tour).stream()
-                .max((r1, r2) -> Integer.compare(r1.getRating(), r2.getRating()));
+                .max((r1, r2) -> Double.compare(r1.getRating(), r2.getRating()));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         Tour tour = new Tour();
         tour.setId(tourId);
         return reviewRepository.findByTour(tour).stream()
-                .min((r1, r2) -> Integer.compare(r1.getRating(), r2.getRating()));
+                .min((r1, r2) -> Double.compare(r1.getRating(), r2.getRating()));
     }
 
     @Override

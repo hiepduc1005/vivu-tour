@@ -1,11 +1,16 @@
+.footer-container{   
+}
+
 .footer {
+    width: 1200px;
     background-color: #fff;
     padding: 20px 0;
     display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     font-family: Arial, sans-serif;
+    margin: 0 auto;
 }
 
 .footer-section {
@@ -13,18 +18,27 @@
     padding: 10px;
     min-width: 200px;
     max-width: 300px;
+    place-self: flex-start;
 }
 
 .footer-section h3 {
-    font-size: 1.2em;
-    color: #ffcc00;
+    font-size: 15px;
+    color: #4E4E4E;
+    font-weight: bold;
+    margin: 0px;
+}
+
+
+.footer-section h3 , .footer-section p, .footer-section a {
+    padding: 4px 0;
 }
 
 .footer-section p, .footer-section a {
-    font-size: 0.9em;
-    color: #ddd;
     line-height: 1.6;
     text-decoration: none;
+    font-size: 13px;
+    color: #818180;
+
 }
 
 .footer-section .list-link{
@@ -34,6 +48,16 @@
 
 .footer-section a:hover {
     color: #ffcc00;
+}
+
+.footer-section .img{
+    display: flex;
+    flex-direction: row;
+}
+
+.footer-section .img img{
+    object-fit: cover;
+    
 }
 
 .social-icons {

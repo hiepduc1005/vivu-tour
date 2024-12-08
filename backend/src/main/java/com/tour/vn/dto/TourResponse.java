@@ -17,10 +17,30 @@ public class TourResponse {
     private LocalDateTime endDate;
     private List<String> images; // Thêm ảnh
     private List<ScheduleResponse> schedules;
-    
-    
+    private List<ReviewResponse> reviews;
+    private double averageRatting;
+    private String ratingDescription;
 
     
+    
+	public String getRatingDescription() {
+		return ratingDescription;
+	}
+	public void setRatingDescription(String ratingDescription) {
+		this.ratingDescription = ratingDescription;
+	}
+	public double getAverageRatting() {
+		return averageRatting;
+	}
+	public void setAverageRatting(double averageRatting) {
+		this.averageRatting = averageRatting;
+	}
+	public List<ReviewResponse> getReviews() {
+		return reviews;
+	}
+	public void setReviews(List<ReviewResponse> reviews) {
+		this.reviews = reviews;
+	}
 	public List<ScheduleResponse> getSchedules() {
 		return schedules;
 	}

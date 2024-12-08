@@ -24,10 +24,10 @@ const Header = () => {
                 <img src={logo}></img>
             </div>
             <ul className="nav-link">
-                <li>Tours</li>
-                <li>Giới thiệu</li>
-                <li>Hỏi đáp</li>
-                <li>Hỗ trợ</li>
+                <li onClick={() => naviage("/dulich")}>Tours</li>
+                <li onClick={() => naviage("/dulich")}>Giới thiệu</li>
+                <li onClick={() => naviage("/dulich")}>Hỏi đáp</li>
+                <li onClick={() => naviage("/dulich")}>Hỗ trợ</li>
             </ul>
            </div>
            <div className="header-right">

@@ -1,12 +1,12 @@
 package com.tour.vn.dto;
 
 public class ReviewUpdate {
-	private int rating;    
+	private Double rating;    
     private String comment;
-	public int getRating() {
+	public Double getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 	public String getComment() {

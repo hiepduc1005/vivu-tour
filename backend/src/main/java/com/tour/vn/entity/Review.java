@@ -21,7 +21,7 @@ public class Review {
     @JoinColumn(name = "tour_id")
     private Tour tour;
 
-    private int rating;
+    private double rating;
     private String comment;
 
     @Column(name = "created_at")
@@ -56,11 +56,11 @@ public class Review {
 		this.tour = tour;
 	}
 
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 

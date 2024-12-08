@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import '../css/TourDetails.css'
-import { Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Typography } from '@mui/material'
-import { Link, useParams } from 'react-router-dom'
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Breadcrumbs, Card, CardContent, CardHeader, Rating, TextField, Typography } from '@mui/material'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircleInfo, faLocationDot, faPlus, faSubtract } from '@fortawesome/free-solid-svg-icons'
 import { getTourById } from '../service/TourApi';
-import ModalBooking from '../components/modal/ModalBooking';
-const TourDetails = () => {
-  
-  const { id } = useParams();
+import Button from "@mui/material/Button";
 
+import ModalBooking from '../components/modal/ModalBooking';
+import { createReview } from '../service/ReviewApi';
+import dayjs from 'dayjs';
+const TourDetails = () => {
+
+  const { id } = useParams();
   const [tour,setTour] = useState()
   const [listDate,setListDate] = useState([])
   const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị modal
@@ -20,11 +23,49 @@ const TourDetails = () => {
   const [dateSelectedIndex,setDateSelectedIndex] = useState();
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token")
+
+  const [newReview, setNewReview] = useState({
+    tourId: id,
+    userId: user ? user.id : null,
+    comment: '',
+    rating: 5,
+  });
+
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
    
   ];
+
+  const handleReviewSubmit = async () => {
+    if (newReview.comment.trim() === '' || newReview.rating < 0.5 || newReview.rating > 5) {
+      alert('Vui lòng nhập đánh giá hợp lệ.');
+      return;
+    }
+
+  
+    if(!user || !token){
+      window.location = window.location.origin + "/signin";
+    }
+
+    try {
+      const reviewCreated = await createReview(newReview,token);
+  
+      if (reviewCreated) {
+        setNewReview({ tourId: id,userId: user ? user.id : null, comment: '', rating: 5 });
+        setTour(prevTour => ({
+          ...prevTour,
+          reviews: [...prevTour.reviews, reviewCreated], // Thêm đánh giá mới vào danh sách đánh giá
+        }));
+      } else {
+        alert('Không thể gửi đánh giá, vui lòng thử lại!');
+      }
+    } catch (error) {
+      console.error('Lỗi gửi đánh giá:', error);
+      alert('Có lỗi xảy ra!');
+    }
+  };
 
   const handleAdd = () => {
     if(quantity <= 30){
@@ -228,6 +269,85 @@ const TourDetails = () => {
             </div>
           </div>
         </div>
+        <Box className="tour-review-section" sx={{ p: 3 }}>
+      {/* Phần tiêu đề */}
+      <Box className="heading" sx={{ mb: 3 }}>
+        <Typography variant="h4" component="h3">
+          Đánh giá về Tour ({tour.reviews.length})
+        </Typography>
+      </Box>
+
+      {/* Danh sách đánh giá */}
+      <Box className="reviews" sx={{ mb: 3 }}>
+        {tour.reviews && tour.reviews.length > 0 ? (
+          tour.reviews.map((review, index) => (
+            <Card key={index} sx={{ mb: 2, borderRadius: 2, boxShadow: 3 }}>
+              <CardHeader
+                avatar={<Avatar alt={review.userName} />}
+                title={
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography variant="h6" sx={{ mr: 1 }}>
+                      {review.userName}
+                    </Typography>
+                    <Rating value={review.rating} readOnly precision={0.5} size="small" />
+                  </Box>
+                }
+                subheader={
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="caption" color="text.secondary">
+                     {dayjs(review.createdAt).format("DD/MM/YYYY HH:mm")}
+                    </Typography> 
+                  </Box>
+                }
+              />
+              <CardContent>
+                <Typography variant="body2">{review.comment}</Typography>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Typography variant="body2" color="text.secondary">Chưa có đánh giá nào.</Typography>
+        )}
+      </Box>
+
+      {/* Thêm đánh giá mới */}
+      <Box className="add-review" sx={{ p: 3, border: "1px solid #ddd", borderRadius: 2 }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          Viết đánh giá của bạn
+        </Typography>
+
+        {/* Phần nội dung đánh giá */}
+        <TextField
+          fullWidth
+          multiline
+          minRows={3}
+          label="Nội dung đánh giá"
+          value={newReview.comment}
+          onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+          sx={{ mb: 3 }}
+        />
+
+        {/* Phần đánh giá sao */}
+        <Box className="rating-section" sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <Typography variant="body1" sx={{ mr: 2 }}>Đánh giá:</Typography>
+          <Rating
+            value={newReview.rating}
+            onChange={(event, newValue) => setNewReview({ ...newReview, rating: newValue })}
+            precision={0.5}
+          />
+        </Box>
+
+        {/* Nút gửi đánh giá */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleReviewSubmit(newReview)}
+          disabled={!newReview.comment || !newReview.rating}
+        >
+          Gửi Đánh Giá
+        </Button>
+      </Box>
+    </Box>
       </div>
       {showModal && (
         <ModalBooking

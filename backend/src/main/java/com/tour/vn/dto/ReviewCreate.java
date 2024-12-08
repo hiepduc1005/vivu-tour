@@ -4,7 +4,7 @@ public class ReviewCreate {
 	
    private Long userId;     
    private Long tourId;     
-   private int rating;      
+   private Double rating;      
    private String comment;
    
 	public Long getUserId() {
@@ -19,10 +19,10 @@ public class ReviewCreate {
 	public void setTourId(Long tourId) {
 		this.tourId = tourId;
 	}
-	public int getRating() {
+	public Double getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 	public String getComment() {

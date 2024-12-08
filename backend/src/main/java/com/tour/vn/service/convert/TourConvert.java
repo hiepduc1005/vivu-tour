@@ -1,5 +1,7 @@
 package com.tour.vn.service.convert;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tour.vn.dto.ReviewResponse;
 import com.tour.vn.dto.ScheduleResponse;
 import com.tour.vn.dto.TourCreate;
 import com.tour.vn.dto.TourResponse;
@@ -24,6 +27,9 @@ public class TourConvert {
 	
 	@Autowired
 	public ScheduleConvert scheduleConvert;
+	
+	@Autowired
+	public ReviewConvert reviewConvert;
 	
 	public Tour tourCreateConvertToTour(TourCreate dto) {
 	    if (dto == null) return null;
@@ -109,6 +115,37 @@ public class TourConvert {
 	    response.setStartLocation(tour.getLocationStart());
 	    response.setEndLocation(tour.getLocation());
 	    response.setImages(tour.getImages());
+	    
+	    
+	    double averageRating = tour.getReviews().stream()
+                .mapToDouble(review -> review.getRating()) // Chuyển các giá trị rating thành IntStream
+                .average() // Tính giá trị trung bình
+                .orElse(5.0); // Nếu không có review nào, trả về 0.0
+	    BigDecimal bd = new BigDecimal(averageRating);
+	    averageRating = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+	    
+	    response.setAverageRatting(averageRating);
+	    
+	    String ratingDescription = "";
+	    if (averageRating >= 4.5 ) {
+	        ratingDescription = "Rất Tốt";
+	    } else if (averageRating >= 3.5) {
+	        ratingDescription = "Tốt";
+	    } else if (averageRating >= 2.5) {
+	        ratingDescription = "Trung Bình";
+	    } else{
+	        ratingDescription = "Kém";
+	    }
+	    
+	    
+	    response.setRatingDescription(ratingDescription);
+
+   
+		List<ReviewResponse> reviewResponses = tour.getReviews().stream()
+		    .map(review -> reviewConvert.convertEntityToResponse(review))
+		    .collect(Collectors.toList());
+		
+	    response.setReviews(reviewResponses);
 
 	    // Xử lý danh sách schedule, tránh null
 	    List<ScheduleResponse> scheduleResponses = tour.getSchedules() != null

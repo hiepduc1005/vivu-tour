@@ -11,6 +11,7 @@ import AdminUser from './pages/AdminUser';
 import AdminTour from './pages/AdminTour';
 import AdminLocation from './pages/AdminLocation';
 import NotFoundPage from './pages/NotFoundPage';
+import AdminBooking from './pages/AdminBooking';
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
           <Route path="/admin"  >
               <Route index element={<AdminUser />} />
               <Route path='tour' element={<AdminTour/>} />
-              <Route path='location' element={<AdminLocation/>} />
+              <Route path='location' element={<AdminLocation/>}/>
+              <Route path='booking' element={<AdminBooking/>} />
 
           </Route>
           <Route path="/" element={<Layout />}>

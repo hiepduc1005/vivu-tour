@@ -8,7 +8,7 @@ public class ReviewResponse {
 	private String userName;       
 	private Long tourId;          
 	private String tourName;      
-	private int rating;            
+	private double rating;            
 	private String comment;       
 	private LocalDateTime createdAt;   
 	private LocalDateTime updatedAt;
@@ -42,10 +42,10 @@ public class ReviewResponse {
 	public void setTourName(String tourName) {
 		this.tourName = tourName;
 	}
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 	public String getComment() {

@@ -25,10 +25,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // Tìm các review theo khoảng thời gian
     List<Review> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
-    // Tính trung bình rating cho một tour
     default double findAverageRatingByTour(Tour tour) {
         return findByTour(tour).stream()
-                .mapToInt(Review::getRating)
+                .mapToDouble(Review::getRating)
                 .average()
                 .orElse(0.0);
     }

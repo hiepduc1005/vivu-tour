@@ -43,6 +43,9 @@ public class BookingConvert {
         booking.setNumPeople(bookingUpdate.getNumPeople());
         booking.setAdditionalRequest(bookingUpdate.getAdditionalRequest());
         booking.setStatus(bookingUpdate.getStatus());
+        booking.setPhone(bookingUpdate.getPhone());
+        booking.setEmail(bookingUpdate.getEmail());
+        booking.setUsername(bookingUpdate.getUsername());
         return booking;
     }
 

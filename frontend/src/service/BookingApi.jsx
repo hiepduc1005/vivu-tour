@@ -7,7 +7,7 @@ const apiBaseUrl = "api/v1/bookings"; // Đường dẫn tới API
 export const getBookings = async () => {
     try {
         const response = await axiosInstance.get(`${apiBaseUrl}`);
-        return response; // Trả về danh sách booking
+        return response.data; // Trả về danh sách booking
     } catch (error) {
         console.error("Error fetching bookings:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi
@@ -40,7 +40,7 @@ export const createBooking = async (bookingData) => {
 export const updateBooking = async (id, bookingData) => {
     try {
         const response = await axiosInstance.put(`${apiBaseUrl}/${id}`, bookingData);
-        return response; // Trả về dữ liệu booking đã cập nhật
+        return response.data; // Trả về dữ liệu booking đã cập nhật
     } catch (error) {
         console.error("Error updating booking:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi

@@ -247,3 +247,11 @@
     border: 2px solid #26bed6; /* Hoặc bất kỳ màu sắc nào bạn muốn */
     border-radius: 5px;
   }
+
+.tour-review-section{
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    margin-top: 10px;
+}
