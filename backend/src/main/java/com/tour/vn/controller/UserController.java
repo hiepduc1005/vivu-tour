@@ -141,6 +141,15 @@ public class UserController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
+    
+    @GetMapping("/today")
+    public ResponseEntity<List<UserResponse>> getAllUsersToday() {
+        List<User> users = userService.getUsersToday();
+        List<UserResponse> responses = users.stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
 
     // Cập nhật thông tin người dùng
     @PutMapping("/{id}")

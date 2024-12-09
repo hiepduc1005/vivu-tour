@@ -6,6 +6,9 @@ import com.tour.vn.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -61,5 +64,14 @@ public class UserServiceImpl implements UserService {
 	public User getUserByEmail(String email) {
 		// TODO Auto-generated method stub
 		return userRepository.findByEmail(email);
+	}
+
+	@Override
+    @Transactional
+	public List<User> getUsersToday() {
+		LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+		return userRepository.findUsersCreatedToday(startOfDay, endOfDay);
 	}
 }

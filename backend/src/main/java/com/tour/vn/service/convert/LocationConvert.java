@@ -19,7 +19,9 @@ public class LocationConvert {
             location.getId(),
             location.getName(),
             location.getDescription(),
-            location.getImagePath()
+            location.getImagePath(),
+            location.getCreatedAt(),
+            location.getUpdatedAt()
         );
     }
 

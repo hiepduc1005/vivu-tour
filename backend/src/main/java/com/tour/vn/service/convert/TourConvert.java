@@ -31,6 +31,9 @@ public class TourConvert {
 	@Autowired
 	public ReviewConvert reviewConvert;
 	
+	@Autowired
+	public LocationConvert locationConvert;
+	
 	public Tour tourCreateConvertToTour(TourCreate dto) {
 	    if (dto == null) return null;
 
@@ -112,8 +115,8 @@ public class TourConvert {
 	    response.setPricePerPerson(tour.getPrices());
 	    response.setStartDate(tour.getStartDate());
 	    response.setEndDate(tour.getEndDate());
-	    response.setStartLocation(tour.getLocationStart());
-	    response.setEndLocation(tour.getLocation());
+	    response.setStartLocation(locationConvert.toLocationResponse(tour.getLocationStart()));
+	    response.setEndLocation(locationConvert.toLocationResponse(tour.getLocation()));
 	    response.setImages(tour.getImages());
 	    
 	    
@@ -127,7 +130,7 @@ public class TourConvert {
 	    response.setAverageRatting(averageRating);
 	    
 	    String ratingDescription = "";
-	    if (averageRating >= 4.5 ) {
+	    if (averageRating >= 4.5 || tour.getReviews().size() == 0) {
 	        ratingDescription = "Rất Tốt";
 	    } else if (averageRating >= 3.5) {
 	        ratingDescription = "Tốt";

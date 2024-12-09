@@ -8,11 +8,15 @@ import com.tour.vn.repository.BookingRepository;
 import com.tour.vn.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -96,4 +100,23 @@ public class BookingServiceImpl implements BookingService {
     public Optional<Booking> getLastBooking() {
         return bookingRepository.findTopByOrderByBookingDateDesc();
     }
+
+	@Override
+	@Transactional
+	public List<Booking> getBookingsToday() {
+		LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+		return bookingRepository.findBookingsToday(startOfDay, endOfDay);
+	}
+
+	@Override
+	public List<Booking> getBookedBookingsToday() {
+		BookingStatus bookedStatus = BookingStatus.COMPLETED;
+		List<Booking> res = getBookingsToday().stream()
+				.filter(booking -> booking.getStatus()  == bookedStatus)
+				.collect(Collectors.toList());
+		return res;
+	}
 }

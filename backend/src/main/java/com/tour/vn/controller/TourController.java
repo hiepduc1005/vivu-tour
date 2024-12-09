@@ -12,6 +12,9 @@ import com.tour.vn.service.convert.TourConvert;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -89,10 +92,39 @@ public class TourController {
 
     // Get all tours ds
     @GetMapping
-    public ResponseEntity<List<TourResponse>> getAllTours() {
-        List<Tour> tours = tourService.getAllTours();
-        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
-        return ResponseEntity.ok(toursResponse);
+    public ResponseEntity<Page<TourResponse>> getAllTours(
+    		@RequestParam(defaultValue = "0",name = "page") int page,  // mặc định page = 0
+            @RequestParam(defaultValue = "10",name = "size") int size
+           ) {
+    	
+    	Pageable pageable = PageRequest.of(page, size);
+
+        Page<Tour> toursPage = tourService.getAllTours(pageable);
+
+        Page<TourResponse> toursResponsePage = toursPage.map(tour -> tourConvert.tourConvertToTourResponse(tour));
+
+        return ResponseEntity.ok(toursResponsePage);
+    }
+    
+    @GetMapping("/search-by-keyword-and-location")
+    public ResponseEntity<Page<TourResponse>> searchToursByKeywordAndLocation(
+            @RequestParam(required = false,defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "-1") Long locationId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Xử lý khi không có locationId
+        Location location = (locationId > 0) ? locationService.getLocationById(locationId) : null;
+
+        // Tìm kiếm tours
+        Page<Tour> toursPage = tourService.getTourByKeyAndLocation(location,keyword,pageable);
+
+        // Chuyển đổi dữ liệu
+        Page<TourResponse> toursResponsePage = toursPage.map(tour -> tourConvert.tourConvertToTourResponse(tour));
+
+        return ResponseEntity.ok(toursResponsePage);
     }
 
     // Delete a tour (Admin-only endpoint)
@@ -126,11 +158,20 @@ public class TourController {
 
     // Search tours by keyword
     @GetMapping("/search")
-    public ResponseEntity<List<TourResponse>> searchTours(@RequestParam String keyword) {
-        List<Tour> tours = tourService.searchTours(keyword);
-        List<TourResponse> toursResponse = tours.stream().map((tour) -> tourConvert.tourConvertToTourResponse(tour)).toList();
+    public ResponseEntity<Page<TourResponse>> searchTours(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,  // mặc định page = 0
+            @RequestParam(defaultValue = "10") int size) {  // mặc định size = 10
+        // Tạo Pageable từ page và size
+        Pageable pageable = PageRequest.of(page, size);
 
-        return ResponseEntity.ok(toursResponse);
+        // Tìm kiếm các tour với phân trang
+        Page<Tour> toursPage = tourService.searchTours(keyword, pageable);
+
+        // Chuyển đổi Page<Tour> thành Page<TourResponse>
+        Page<TourResponse> toursResponsePage = toursPage.map(tour -> tourConvert.tourConvertToTourResponse(tour));
+
+        return ResponseEntity.ok(toursResponsePage);
     }
 
     // Check availability for a tour

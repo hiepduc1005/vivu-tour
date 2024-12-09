@@ -9,8 +9,8 @@ public class TourResponse {
     private Long id;
     private String name;
     private String description;
-    private Location startLocation;
-    private Location endLocation;
+    private LocationResponse startLocation;
+    private LocationResponse endLocation;
     private int availableSlots;
     private double pricePerPerson;
     private LocalDateTime startDate;
@@ -71,16 +71,16 @@ public class TourResponse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Location getStartLocation() {
+	public LocationResponse getStartLocation() {
 		return startLocation;
 	}
-	public void setStartLocation(Location startLocation) {
+	public void setStartLocation(LocationResponse startLocation) {
 		this.startLocation = startLocation;
 	}
-	public Location getEndLocation() {
+	public LocationResponse getEndLocation() {
 		return endLocation;
 	}
-	public void setEndLocation(Location endLocation) {
+	public void setEndLocation(LocationResponse endLocation) {
 		this.endLocation = endLocation;
 	}
 	public int getAvailableSlots() {

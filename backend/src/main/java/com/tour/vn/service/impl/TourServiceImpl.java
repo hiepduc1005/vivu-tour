@@ -4,6 +4,9 @@ import com.tour.vn.entity.Location;
 import com.tour.vn.entity.Tour;
 import com.tour.vn.repository.TourRepository;
 import com.tour.vn.service.TourService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +44,8 @@ public class TourServiceImpl implements TourService {
 
     @Override
     @Transactional
-    public List<Tour> getAllTours() {
-        return tourRepository.findAll();
+    public Page<Tour> getAllTours(Pageable pageable) {
+        return tourRepository.findAll(pageable);
     }
 
     @Override
@@ -67,8 +70,8 @@ public class TourServiceImpl implements TourService {
 
     @Override
     @Transactional
-    public List<Tour> searchTours(String searchKeyword) {
-        return tourRepository.searchTours(searchKeyword);
+    public Page<Tour> searchTours(String searchKeyword,Pageable pageable) {
+        return tourRepository.searchTours(searchKeyword,pageable);
     }
 
     @Override
@@ -106,5 +109,14 @@ public class TourServiceImpl implements TourService {
     public List<Tour> getToursByStartDateAndLocation(LocalDateTime startDate, Location location){
     	return tourRepository.findByStartDateAndLocation(startDate, location);
     }
+
+	@Override
+	@Transactional
+	public Page<Tour> getTourByKeyAndLocation(Location location, String keyword, Pageable pageable) {
+		if(location == null) {
+			return tourRepository.searchTours(keyword, pageable);
+		}
+		return tourRepository.findByKeywordAndLocation(keyword, location, pageable);
+	}
 
 }

@@ -10,5 +10,5 @@ public interface LocationService {
 	Location createLocation(Location location);
 	Location updateLocation(Long id, Location locationDetails);
 	void deleteLocation(Long id);
-	
+	List<Location> getLocationsToday();
 }

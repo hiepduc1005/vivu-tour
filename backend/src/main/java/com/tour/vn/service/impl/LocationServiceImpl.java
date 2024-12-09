@@ -1,8 +1,12 @@
 package com.tour.vn.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tour.vn.entity.Location;
 import com.tour.vn.repository.LocationRepository;
@@ -47,6 +51,16 @@ public class LocationServiceImpl implements LocationService{
 	@Override
 	public void deleteLocation(Long id) {
 		 locationRepository.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public List<Location> getLocationsToday() {
+		LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+        return locationRepository.findLocationsToday(startOfDay, endOfDay);
 	}
 
 }

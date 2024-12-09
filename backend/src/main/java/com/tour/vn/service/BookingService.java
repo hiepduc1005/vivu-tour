@@ -23,4 +23,8 @@ public interface BookingService {
     long countBookingsByStatus(BookingStatus status);
     boolean isBookingPaid(Long bookingId);
     Optional<Booking> getLastBooking();
+    
+    List<Booking> getBookingsToday();
+    List<Booking> getBookedBookingsToday();
+
 }

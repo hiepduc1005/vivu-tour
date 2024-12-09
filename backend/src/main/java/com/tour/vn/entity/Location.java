@@ -1,5 +1,10 @@
 package com.tour.vn.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,8 +21,34 @@ public class Location {
 
     @Column(name = "image_path") // Tên cột trong database
     private String imagePath; // Đường dẫn ảnh
+    
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    public Location() {}
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+    
+    
+
+    public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Location() {}
 
     public Location(String name, String description, String imagePath) {
         this.name = name;

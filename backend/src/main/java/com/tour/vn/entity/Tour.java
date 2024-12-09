@@ -52,14 +52,14 @@ public class Tour {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<Booking>();
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<Review>();
     
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     @OrderBy("day ASC") // Sắp xếp theo trường 'day' tăng dần
-    private List<Schedule> schedules;
+    private List<Schedule> schedules = new ArrayList<Schedule>();
     
     
 

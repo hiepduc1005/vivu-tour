@@ -59,6 +59,22 @@ public class BookingController {
 	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
         return ResponseEntity.ok(bookingResponses);
     }
+    
+    @GetMapping("/today")
+    public ResponseEntity<List<BookingResponse>>  getBookingsToday() {
+    	List<Booking> bookings = bookingService.getBookingsToday();
+    	List<BookingResponse> bookingResponses =  bookings.stream()
+    	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+    	return ResponseEntity.ok(bookingResponses);
+    }
+
+    @GetMapping("/today/booked")
+    public ResponseEntity<List<BookingResponse>> getBookedBookingsToday() {
+    	List<Booking> bookings = bookingService.getBookedBookingsToday();
+    	List<BookingResponse> bookingResponses =  bookings.stream()
+    	        .map(booking -> bookingConvert.bookingConvertToBookingResponse(booking)).collect(Collectors.toList());
+    	return ResponseEntity.ok(bookingResponses);
+    }
 
     // Update a booking
     @PutMapping("/{id}")

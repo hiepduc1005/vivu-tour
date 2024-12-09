@@ -46,6 +46,15 @@ public class LocationController {
         LocationResponse locationResponse = locationConvert.toLocationResponse(location);
         return ResponseEntity.ok(locationResponse);
     }
+    
+    @GetMapping("/today")
+    public ResponseEntity<List<LocationResponse>> getLocationsToday() {
+    	List<Location> locations = locationService.getLocationsToday();
+    	List<LocationResponse> locationResponses = locations.stream()
+                .map(locationConvert::toLocationResponse)
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(locationResponses);
+    }
 
     @PostMapping
     public ResponseEntity<LocationResponse> createLocation(

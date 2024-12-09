@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface TourService {
 	Tour createTour(Tour tour);
 	    
@@ -14,7 +17,7 @@ public interface TourService {
     
     Optional<Tour> getTourById(Long id);
     
-    List<Tour> getAllTours();
+    Page<Tour> getAllTours(Pageable pageable);
     
     void deleteTour(Long id);
     
@@ -22,13 +25,15 @@ public interface TourService {
     
     List<Tour> getToursByStartDate(LocalDateTime startDate);
     
-    List<Tour> searchTours(String searchKeyword);
+    Page<Tour> searchTours(String searchKeyword,Pageable pageable);
     
     boolean checkAvailability(Long tourId, int requiredSlots);
     
     void updateAvailableSlots(Long tourId, int bookedSlots);
     
     List<Tour> getToursByStartDateAndLocation(LocalDateTime startDate, Location location);
+    
+    Page<Tour> getTourByKeyAndLocation(Location location, String keyword, Pageable pageable);
     
     List<Tour> getToursByStartLocation(Location locationStart);
 
