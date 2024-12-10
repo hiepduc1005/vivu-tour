@@ -3,7 +3,7 @@ import { getLocations, deleteLocation, updateLocation } from '../service/Locatio
 import './ListLocation.css';
 import ModalUpdateLocation from './modal/ModalUpdateLocation';
 
-const ListLocation = () => {
+const ListLocation = ({locationCreated}) => {
   const [locations, setLocations] = useState([]);
   const [error, setError] = useState('');
   const [selectedLocation, setSelectedLocation] = useState(null);  // Track the selected location
@@ -22,7 +22,7 @@ const ListLocation = () => {
     };
 
     fetchLocations();
-  }, []);
+  }, [locationCreated]);
 
   const handleDelete = async (id) => {
     try {

@@ -1,0 +1,85 @@
+/* Tổng container */
+.help-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Tiêu đề */
+  .help-title {
+    text-align: center;
+    color: #1a2c4b;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  /* Bố cục dạng lưới */
+  .help-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 cột */
+    gap: 20px;
+  }
+  
+  /* Thẻ thông tin */
+  .help-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .help-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Tiêu đề trong thẻ */
+  .help-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a2c4b;
+    margin-bottom: 10px;
+  }
+  
+  /* Mô tả */
+  .help-card-description {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  /* Nút */
+  .help-card-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #1a2c4b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .help-card-button:hover {
+    background-color: #0056b3;
+  }
+  @media (max-width: 768px) {
+    .help-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 cột trên màn hình nhỏ */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .help-grid {
+      grid-template-columns: 1fr; /* 1 cột trên màn hình rất nhỏ */
+    }
+  }
+  

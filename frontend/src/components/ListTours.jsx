@@ -4,7 +4,7 @@ import './ListTours.css';
 import ModalUpdateTour from './modal/ModalUpdateTour';
 import dayjs from 'dayjs';
 
-const ListTours = ({locations}) => {
+const ListTours = ({locations,createdTour}) => {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -26,15 +26,19 @@ const ListTours = ({locations}) => {
         prev.map((tour) => (tour.id === tourUpdated.id ? tourUpdated : tour))
       );
     }
-    console.log(tourUpdated)
   };
+
 
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa tour này không?')) {
       try {
-        await deleteTour(id);
-        setTours(tours.filter((tour) => tour.id !== id));
+        const response = await deleteTour(id);
+        if(response && response.status){
+          setTours((prev) => prev.filter((tour) => tour.id !== id));
+          alert("Xoa tour thanh cong");
+        }
       } catch (err) {
+        console.log(err)
         setError('Có lỗi xảy ra khi xóa tour.');
       }
     }
@@ -44,7 +48,7 @@ const ListTours = ({locations}) => {
     const fetchTours = async () => {
       try {
         const toursData = await getTours();
-        setTours(toursData);
+        setTours(toursData?.content);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching tours:', error);
@@ -54,7 +58,7 @@ const ListTours = ({locations}) => {
     };
 
     fetchTours();
-  }, []);
+  }, [createdTour]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -80,7 +84,7 @@ const ListTours = ({locations}) => {
           </tr>
         </thead>
         <tbody>
-          {tours && tours.map((tour) => (
+          {tours && tours?.map((tour) => (
             <tr key={tour.id}>
               <td>{tour.name}</td>
               <td>{tour.description}</td>

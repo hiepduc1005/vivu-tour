@@ -44,7 +44,7 @@ const ModalBooking = ({dateSelected, quantity, tour, user, onClose }) => {
   };
 
   return (
-    <div className="modal-container">
+    <div className="modal-booking-container">
       {!isBookingSuccess ? (
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <button className="close-button" onClick={onClose}>&times;</button>

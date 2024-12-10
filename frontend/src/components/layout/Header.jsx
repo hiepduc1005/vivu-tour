@@ -20,14 +20,14 @@ const Header = () => {
   return (
     <header className="header">
            <div className="header-left">
-            <div className="logo">
+            <div className="logo" onClick={() => naviage("/")}>
                 <img src={logo}></img>
             </div>
             <ul className="nav-link">
                 <li onClick={() => naviage("/dulich")}>Tours</li>
-                <li onClick={() => naviage("/dulich")}>Giới thiệu</li>
-                <li onClick={() => naviage("/dulich")}>Hỏi đáp</li>
-                <li onClick={() => naviage("/dulich")}>Hỗ trợ</li>
+                <li onClick={() => naviage("/about")}>Giới thiệu</li>
+                <li onClick={() => naviage("/common-question")}>Hỏi đáp</li>
+                <li onClick={() => naviage("/help")}>Hỗ trợ</li>
             </ul>
            </div>
            <div className="header-right">

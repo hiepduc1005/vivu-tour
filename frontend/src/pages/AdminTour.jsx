@@ -4,6 +4,7 @@ import { createTour, getTours, deleteTour } from '../service/TourApi';
 import '../css/AdminTour.css'; 
 import { getLocations } from '../service/LocationApi';
 import ListTours from '../components/ListTours';
+import { Link } from 'react-router-dom';
 
 const AdminTour = () => {
   const [locations, setLocations] = useState([]);
@@ -23,6 +24,7 @@ const AdminTour = () => {
     { day: '', activity: '' },
   ]); // Nhiều input lịch trình
   const [error, setError] = useState('');
+  const [createdTour,setCreatedTour] = useState();
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
@@ -81,15 +83,16 @@ const AdminTour = () => {
       const formattedEndDate = dayjs(formData.endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss');
 
       // Gửi dữ liệu đến backend
-      await createTour({ 
+      const createdTourData = await createTour({ 
         ...formData, 
         startDate: formattedStartDate, 
         endDate: formattedEndDate,
         schedule: scheduleInputs, // Gửi lịch trình động
       });
 
+      setCreatedTour(createdTourData);
+
       resetForm();
-      await refreshTours();
     } catch (err) {
       setError('Có lỗi xảy ra khi tạo tour.');
     }
@@ -123,6 +126,13 @@ const AdminTour = () => {
     <>
       <div className="admintour-container">
         <h2>Quản Lý Tour</h2>
+
+        <div className="back-to-admin">
+          <Link to="/admin" className="btn btn-back">
+            &larr; Back to Admin Dashboard
+          </Link>
+        </div>
+
         {loading && <p>Đang tải...</p>}
         {error && <p className="error">{error}</p>}
 
@@ -258,7 +268,7 @@ const AdminTour = () => {
           <button type="submit">Tạo Tour</button>
         </form>
       </div>
-      <ListTours locations={locations}/>
+      <ListTours locations={locations} createdTour={createdTour}/>
     </>
   );
 };

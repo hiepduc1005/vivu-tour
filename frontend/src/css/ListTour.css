@@ -110,3 +110,91 @@
     height: 200px;
     background-color: #fff;
 }
+
+/* Container cho pagination */
+.pagination {
+  display: flex;
+  justify-content: center; /* Căn giữa các nút phân trang */
+  align-items: center;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+/* Chỉnh kiểu cho từng item trang */
+.page-item {
+  margin: 0 5px; /* Khoảng cách giữa các trang */
+}
+
+/* Chỉnh kiểu cho liên kết của từng trang */
+.page-link {
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Nút "Previous" */
+.previous a{
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+}
+
+.previous:hover a{
+  background-color: #ddd;
+}
+
+/* Nút "Next" */
+.next a{
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+}
+
+.next:hover a{
+  background-color: #ddd;
+}
+
+/* Nút bị disable */
+.previous.disabled a, .next.disabled a{
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #999;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+}
+
+/* Nút active (trang hiện tại) */
+.selected .page-link {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Các trang khác khi hover */
+.page-link:hover {
+  background-color: #ddd;
+}
+
+/* Định dạng khi trang vượt quá giới hạn */
+.break {
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+
+.no-tours-message {
+  text-align: center;
+  font-size: 16px;
+  color: #ff0000;
+  margin: 20px 0;
+}

@@ -9,8 +9,9 @@ import { getTourById } from '../service/TourApi';
 import Button from "@mui/material/Button";
 
 import ModalBooking from '../components/modal/ModalBooking';
-import { createReview } from '../service/ReviewApi';
+import { createReview, deleteReview } from '../service/ReviewApi';
 import dayjs from 'dayjs';
+import { getUserRoleByToken } from '../service/UserApi';
 const TourDetails = () => {
 
   const { id } = useParams();
@@ -21,6 +22,7 @@ const TourDetails = () => {
   const [totalPrice,setTotalPrice] = useState();
   const [dateSelected,setDateSelected] = useState();
   const [dateSelectedIndex,setDateSelectedIndex] = useState();
+  const [roles,setRoles] = useState();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token")
@@ -121,6 +123,35 @@ const TourDetails = () => {
     }
   }
 
+  const fetchUserRole = async (tok) => {
+    try{
+      const rolesData = await getUserRoleByToken(tok);
+      if(rolesData){
+        setRoles(rolesData);
+      }
+    }catch{
+      console.log("loi");
+    }
+  }
+
+  const handleDeleteReview = async (id) => {
+    try {
+      const res = await deleteReview(id); // Gọi API để xóa review
+      if (res && res.status === 200) {
+        setTour((prev) => ({
+          ...prev,
+          reviews: prev.reviews.filter((review) => review.id !== id), // Lọc bỏ review có id trùng với id được xóa
+        }));
+      }
+    } catch (error) {
+      console.log("Lỗi khi xóa review:", error);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
   useEffect(() => {
     if (tour) {
       setTotalPrice(quantity * tour.pricePerPerson);
@@ -128,6 +159,9 @@ const TourDetails = () => {
   }, [quantity, tour]);
 
   useEffect(() => {
+    if(token){
+      fetchUserRole(token)
+    }
     fetchTourById(id);
     setListDate(generateNextDays(4));
   },[])
@@ -265,7 +299,7 @@ const TourDetails = () => {
                <button 
                   className="button-book" 
                   style={{justifyContent: "flex-end"}}
-                  onClick={() => setShowModal(true)}> Yêu cầu đặt</button>
+                  onClick={() => handleOpenModal()}> Yêu cầu đặt</button>
             </div>
           </div>
         </div>
@@ -278,37 +312,45 @@ const TourDetails = () => {
       </Box>
 
       {/* Danh sách đánh giá */}
-      <Box className="reviews" sx={{ mb: 3 }}>
-        {tour.reviews && tour.reviews.length > 0 ? (
-          tour.reviews.map((review, index) => (
-            <Card key={index} sx={{ mb: 2, borderRadius: 2, boxShadow: 3 }}>
-              <CardHeader
-                avatar={<Avatar alt={review.userName} />}
-                title={
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="h6" sx={{ mr: 1 }}>
-                      {review.userName}
-                    </Typography>
-                    <Rating value={review.rating} readOnly precision={0.5} size="small" />
-                  </Box>
-                }
-                subheader={
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography variant="caption" color="text.secondary">
-                     {dayjs(review.createdAt).format("DD/MM/YYYY HH:mm")}
-                    </Typography> 
-                  </Box>
-                }
-              />
-              <CardContent>
-                <Typography variant="body2">{review.comment}</Typography>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body2" color="text.secondary">Chưa có đánh giá nào.</Typography>
-        )}
-      </Box>
+      <div className="reviews">
+        {tour.reviews && Array.isArray(tour.reviews) && tour.reviews.map((review) => (
+          <Card key={review.id} className="review-card" style={{ marginBottom: '20px', position: 'relative' }}>
+            {/* Nút xóa nằm ở góc trên bên phải */}
+            {Array.isArray(roles) && roles.includes("ADMIN") && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDeleteReview(review.id)}
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  zIndex: 1,
+                }}
+              >
+                Xóa
+              </Button>
+            )}
+            <CardHeader
+              avatar={<Avatar>{review.userName.charAt(0)}</Avatar>}
+              title={review.userName}
+              subheader={
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Rating value={review.rating || 0} readOnly size="small" />
+                  <span>{dayjs(review.createdAt).format('DD/MM/YYYY')}</span>
+                </div>
+              }
+            />
+            <CardContent>
+              <Typography variant="body2">{review.comment}</Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+
+
+
 
       {/* Thêm đánh giá mới */}
       <Box className="add-review" sx={{ p: 3, border: "1px solid #ddd", borderRadius: 2 }}>

@@ -3,7 +3,9 @@ import tour from '../assets/image/tour.jpg'
 import "./Tour.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 const Tour = ({tour}) => {
+    const navigate = useNavigate();
 
     const [totalDayAndNight,setTotalDayAndNight] = useState(calculateDaysAndNights(tour.startDate,tour.endDate));
 
@@ -25,12 +27,12 @@ const Tour = ({tour}) => {
         };
     }
   return (
-    <div className='tour-container'>
+    <div className='tour-container' onClick={() => window.location = window.location.origin + "/dulich/" + tour.id}>
         <div className="img">
             <img src={`http://localhost:8080${tour.images[0]}`} alt="TOUR" />
         </div>
         <div className="tour-wrap">
-            <div className="tour-name">Tour Thái Lan 5N4Đ: Bangkok - Pattaya - Công Viên Khủng Long (Bay Sáng, Trưa)</div>
+            <div className="tour-name">{tour.name}</div>
             <div className="tour-ratting">
                 <div className="score">{tour.averageRatting} </div>
                 <div className="score-description">{tour.ratingDescription}</div>

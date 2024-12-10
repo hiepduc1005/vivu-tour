@@ -6,10 +6,12 @@ import popularLocation from '../assets/image/popular-location.jpg'
 import otherPopularLocation from '../assets/image/other-popular-location.jpg'
 import { useNavigate } from 'react-router-dom'
 import { createTour, getTours } from '../service/TourApi'
+import { getLocations } from '../service/LocationApi'
 
 
 const Homepage = () => {
     const [tours, setTours] = useState([]); // Khởi tạo state để lưu danh sách tour
+    const [location,setLocation] = useState([])
     const user = localStorage.getItem('user');
     const naviage = useNavigate();
 
@@ -22,8 +24,18 @@ const Homepage = () => {
         }
     };
 
+    const fetchLocations = async () => {
+        try {
+            const response = await getLocations();
+            setLocation(response);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         fetchListTour(); // Gọi hàm fetch khi component được render
+        fetchLocations();
     }, []);
 
   return (
@@ -51,14 +63,14 @@ const Homepage = () => {
                     <div className='subname'>Nhanh Tay Đặt Ngay. Để Mai Sẽ Lỡ</div>
                 </div>
                 <div className="list-tour">
-                 {tours?.map((tour, index) => (
+                 {tours?.content?.map((tour, index) => (
                             <Tour tour={tour} /> // Hiển thị từng tour
                         
                         ))} 
 
                 </div>
                 <div className="more-tour">
-                    <a href='#'>Xem thêm tours</a>
+                    <a href='/dulich'>Xem thêm tours</a>
                 </div>
             </div>
         </div>
@@ -80,8 +92,21 @@ const Homepage = () => {
                     </div>
                 </div>
                 <div className="after-first-item">
-                    
-                    <div className="popular-item">
+
+                    {location && location?.map((item,index) => {
+                        return (
+                            <div className="popular-item" key={`item${item}index${index}`} onClick={() => window.location.href = `dulich?locationId=${item.id}&s=`}>
+                                <div className="img-container">
+                                    <img src={`http://localhost:8080${item.imagePath}`} alt="" />
+                                    <div class="overlay">
+                                        <div className="location-name">{item.name}</div>
+                                        {/* <div className="number-tours">168</div> */}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                    {/* <div className="popular-item">
                         <div className="img-container">
                             <img src={otherPopularLocation} alt="" />
                             <div class="overlay">
@@ -116,7 +141,7 @@ const Homepage = () => {
                                 <div className="number-tours">168</div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

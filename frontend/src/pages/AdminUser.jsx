@@ -1,51 +1,205 @@
-// src/components/AdminUser.js
 import React, { useEffect, useState } from 'react';
-import { getUsers } from '../service/UserApi'; // Import hàm getUsers
-import '../css/AdminUser.css'; // Nhập tệp CSS
-import { useNavigate } from 'react-router-dom';
+import '../css/AdminUser.css'; // Tạo file CSS tương ứng
+import { deleteUser, getUsers, updateUser } from '../service/UserApi'; // API cho user
+import ModalUpdateUser from '../components/modal/ModalUpdateUser'; // Modal cập nhật user
+import { Link } from 'react-router-dom';
+import CreateUserForm from '../components/CreateUserForm';
 
 const AdminUser = () => {
-    const [users, setUsers] = useState([]); // State để lưu danh sách người dùng
-    const [loading, setLoading] = useState(true); // State để quản lý trạng thái tải
-    const [error, setError] = useState(''); // State để lưu lỗi nếu có
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchName, setSearchName] = useState('');
+  const [searchEmail, setSearchEmail] = useState('');
+  const [selectedUser, setSelectedUser] = useState(null); // User được chọn để cập nhật
+  const [showModal, setShowModal] = useState(false); // Hiển thị modal
+  const [loading, setLoading] = useState(false); // Trạng thái loading khi cập nhật
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    const navigate = useNavigate();
-
-    useEffect(() => {
-    if (user.roleResponses.some(role => role.name === "USER")) {
-        navigate('/'); // Điều hướng đến trang chính sau khi đăng nhập thành công
-    }else if (user.roleResponses.some(role => role.name === "ADMIN")) {
-            navigate('/admin'); // Điều hướng đến trang admin nếu người dùng là ADMIN
+  // Lấy danh sách user từ API
+  const fetchUsers = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const userData = await getUsers(token);
+      if (userData) {
+        setUsers(userData);
+        setFilteredUsers(userData); // Hiển thị tất cả dữ liệu ban đầu
+      }
+    } catch (error) {
+      window.location = window.location.origin + '/signin';
     }
-        const fetchUsers = async () => {
-            try {
-                const userList = await getUsers(); // Gọi hàm getUsers để lấy danh sách người dùng
-                setUsers(userList); // Lưu danh sách người dùng vào state
-            } catch (err) {
-                setError('Không thể lấy danh sách người dùng.'); // Cập nhật lỗi nếu có
-            } finally {
-                setLoading(false); // Đặt trạng thái tải là false khi hoàn thành
-            }
-        };
+  };
 
-        fetchUsers(); // Gọi hàm lấy người dùng
-    }, []); // Chỉ gọi một lần khi component được mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-    return (
-        <div className="admin-user-container"> {/* Sử dụng class CSS */}
-            <h2>Danh Sách Người Dùng</h2>
-            {loading && <p>Đang tải...</p>} {/* Hiển thị thông báo đang tải */}
-            {error && <p className="error">{error}</p>} {/* Hiển thị lỗi nếu có */}
-            {!loading && !error && (
-                <ul>
-                    {users.map(user => (
-                        <li key={user.id}>{user.name} - {user.email}</li> // Hiển thị tên và email người dùng
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
+  // Hàm tìm kiếm
+  const handleSearch = () => {
+    let filtered = users;
+
+    if (searchName) {
+      filtered = filtered.filter((user) =>
+        user.name.toLowerCase().includes(searchName.toLowerCase())
+      );
+    }
+
+    if (searchEmail) {
+      filtered = filtered.filter((user) =>
+        user.email.toLowerCase().includes(searchEmail.toLowerCase())
+      );
+    }
+
+    setFilteredUsers(filtered);
+  };
+
+  // Hàm mở modal và tải thông tin user
+  const handleEdit = (user) => {
+    setSelectedUser({ ...user }); // Sao chép dữ liệu user vào state để chỉnh sửa
+    setShowModal(true); // Hiển thị modal
+  };
+
+  // Hàm xóa user
+  console.log(filteredUsers);
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      setLoading(true);
+      try {
+        const response = await deleteUser(id);
+        console.log(response)
+        if (response && response.status === 200) {
+          setFilteredUsers((prev) => prev.filter((user) => user.id !== id));
+          console.log(filteredUsers);
+          console.log('test');
+          alert('User deleted successfully!');
+        }
+      } catch (error) {
+        console.error('Failed to delete user:', error);
+        alert('Failed to delete user. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Hàm xử lý cập nhật user
+  const handleUpdate = async (updatedUser) => {
+    setLoading(true);
+
+    try {
+      const data = {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        roleIds: updatedUser.roleIds,
+      };
+      const response = await updateUser(selectedUser.id, data);
+      alert('User updated successfully!');
+      setFilteredUsers((prev) =>
+        prev.map((user) => (user.id === response.id ? response : user))
+      );
+      setShowModal(false); // Đóng modal
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      alert('Failed to update user. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
+    <div className="admin-user-container">
+      <h1 className="admin-user-title">Admin User</h1>
+
+      <div className="back-to-admin">
+        <Link to="/admin" className="btn btn-back">
+          &larr; Back to Admin Dashboard
+        </Link>
+      </div>
+
+       <CreateUserForm setUsers={setUsers} fetchUsers={fetchUsers}></CreateUserForm>
+      {/* Bộ lọc */}
+      <div className="filter-container">
+        <label>
+          Name:
+          <input
+            type="text"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            placeholder="Search by name"
+          />
+        </label>
+
+        <label>
+          Email:
+          <input
+            type="text"
+            value={searchEmail}
+            onChange={(e) => setSearchEmail(e.target.value)}
+            placeholder="Search by email"
+          />
+        </label>
+
+        <button onClick={handleSearch}>Search</button>
+      </div>
+
+      {/* Bảng dữ liệu */}
+      <table className="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsers.map((user) => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+              <td>{user.roleResponses.map((role) => role.name)}</td>
+              <td>{user.createdAt}</td>
+              <td>{user.updatedAt}</td>
+
+              <td>
+                <button
+                  className="btn btn-edit"
+                  onClick={() => handleEdit(user)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-delete"
+                  onClick={() => handleDelete(user.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Hiển thị Modal */}
+      {showModal ? 
+        <ModalUpdateUser
+            userData={selectedUser}
+            handleUpdate={handleUpdate}
+            handleClose={() => setShowModal(false)}
+            loading={loading}
+        />
+
+        : ""
+      }
+    </div>
+  );
 };
 
 export default AdminUser;

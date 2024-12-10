@@ -1,0 +1,67 @@
+/* Tạo kiểu cho form tạo người dùng */
+.create-user-form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-user-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .create-user-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .create-user-form label {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .create-user-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .create-user-form input:focus {
+    border-color: #007bff;
+  }
+  
+  .create-user-form button {
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-user-form button:hover {
+    background-color: #218838;
+  }
+  
+  .create-user-form button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .create-user-form .error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+  }
+  

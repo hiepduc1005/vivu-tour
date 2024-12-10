@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createLocation } from '../service/LocationApi';
 import '../css/AdminLocation.css';
 import ListLocation from '../components/ListLocation';
+import { Link } from 'react-router-dom';
 
 const AdminLocation = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const AdminLocation = () => {
     description: '',
     file: null, // Lưu file ảnh
   });
+
+  const [locationCreated,setLocationCreated] = useState();
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -27,6 +30,7 @@ const AdminLocation = () => {
     try {
       const response = await createLocation(formData); // Gọi API từ LocationApi.js
       setMessage('Location created successfully!');
+      setLocationCreated(response);
       setError('');
       setFormData({ name: '', description: '', file: null });
       console.log('Created Location:', response);
@@ -41,6 +45,13 @@ const AdminLocation = () => {
     <>
       <div className="adminlocation-container">
         <h2>Create Location</h2>
+
+        <div className="back-to-admin">
+          <Link to="/admin" className="btn btn-back">
+            &larr; Back to Admin Dashboard
+          </Link>
+        </div>
+
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
 
@@ -81,7 +92,7 @@ const AdminLocation = () => {
           <button type="submit">Create Location</button>
         </form>
       </div>
-      <ListLocation></ListLocation>
+      <ListLocation locationCreated={locationCreated}></ListLocation>
     </>
   );
 };

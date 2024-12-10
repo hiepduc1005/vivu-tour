@@ -40,7 +40,7 @@ export const createReview = async (review,token) => {
   // Xóa một đánh giá theo ID
   export const deleteReview = async (id) => {
     const response = await axiosInstance.delete(`${apiBaseUrl}/${id}`);
-    return response.data;
+    return response;
   };
   
   // Lấy đánh giá theo tour ID và rating lớn hơn giá trị cho trước

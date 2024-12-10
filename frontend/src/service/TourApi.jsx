@@ -3,11 +3,11 @@ import axiosInstance from "../ultils/axiosCustomize";
 
 const apiBaseUrl = "api/v1/tours"; // Đường dẫn tới API
 
-// Lấy danh sách tour
-export const getTours = async () => {
+export const getTours = async (page = 0) => {
     try {
-        const response = await axiosInstance.get(`${apiBaseUrl}`);
-        return response.data; // Trả về danh sách tour
+        // Include the page parameter in the request URL
+        const response = await axiosInstance.get(`${apiBaseUrl}?page=${page}&size=${100}`);
+        return response.data; // Trả về danh sách tour với dữ liệu phân trang
     } catch (error) {
         console.error("Error fetching tours:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi
@@ -24,6 +24,29 @@ export const getTourById = async (id) => {
         throw error; // Ném lỗi để xử lý ở nơi gọi
     }
 };
+
+export const searchTours = async (page,search) => {
+    try {
+        // Include the page parameter in the request URL
+        const response = await axiosInstance.get(`${apiBaseUrl}/search?keyword=${search}&page=${page}&size=${10}`);
+        return response.data; // Trả về danh sách tour với dữ liệu phân trang
+    } catch (error) {
+        console.error("Error fetching tours:", error);
+        throw error; // Ném lỗi để xử lý ở nơi gọi
+    }
+};
+
+export const searchToursByKeywordAndLocation = async (page,search,locationId) => {
+    try {
+        // Include the page parameter in the request URL
+        const response = await axiosInstance.get(`${apiBaseUrl}/search-by-keyword-and-location?keyword=${search}&locationId=${locationId}&page=${page}&size=${10}`);
+        return response.data; // Trả về danh sách tour với dữ liệu phân trang
+    } catch (error) {
+        console.error("Error fetching tours:", error);
+        throw error; // Ném lỗi để xử lý ở nơi gọi
+    }
+};
+
 
 export const createTour = async (tourData) => {
     const formData = new FormData();
@@ -96,7 +119,7 @@ export const updateTour = async (id, tourData) => {
 export const deleteTour = async (id) => {
     try {
         const response = await axiosInstance.delete(`${apiBaseUrl}/${id}`);
-        return response.data; // Trả về dữ liệu kết quả xóa
+        return response; // Trả về dữ liệu kết quả xóa
     } catch (error) {
         console.error("Error deleting tour:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi

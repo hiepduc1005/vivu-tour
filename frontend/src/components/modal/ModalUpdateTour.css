@@ -1,6 +1,5 @@
-/* ModalUpdateTour.css */
 
-.modal-overlay {
+.modal-overlay.modalupdate-tour {
   position: fixed;
   top: 0;
   left: 0;
@@ -30,7 +29,7 @@ body.no-scroll {
     overflow: hidden;
   }
 
-  .modal{
+  .modalupdate-tour .modal{
     background: #ffffff;
     width: 90%;
     max-width: 600px;

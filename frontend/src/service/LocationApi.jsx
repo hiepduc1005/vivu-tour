@@ -59,6 +59,20 @@ export const createLocation = async (locationData) => {
     }
   };
 
+  export const getLocationsToday = async (token) => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/today`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Sending the token in the Authorization header
+        },
+      });
+      return response.data; // Returning the data from the API response
+    } catch (err) {
+      console.error('Error fetching locations:', err);
+      throw err; // Rethrow error for further handling
+    }
+  };
+
   
   
   export const deleteLocation = async (id,token) => {

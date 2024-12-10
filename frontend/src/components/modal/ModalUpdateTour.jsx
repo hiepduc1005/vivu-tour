@@ -132,8 +132,9 @@ const ModalUpdateTour = ({ isOpen, onClose, tourData, onUpdate,locations}) => {
 
   if (!isOpen) return null;
 
+
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay modalupdate-tour">
       <div className="modal"onClick={(e) => e.stopPropagation()}>
         <div className="modal-content">
             <h3>Cập Nhật Tour</h3>

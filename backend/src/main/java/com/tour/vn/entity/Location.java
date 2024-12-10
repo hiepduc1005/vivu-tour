@@ -1,6 +1,7 @@
 package com.tour.vn.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -30,9 +31,20 @@ public class Location {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    private List<Tour> tours;
+    
     
 
-    public LocalDateTime getCreatedAt() {
+    public List<Tour> getTours() {
+		return tours;
+	}
+
+	public void setTours(List<Tour> tours) {
+		this.tours = tours;
+	}
+
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 

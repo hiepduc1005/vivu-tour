@@ -14,6 +14,35 @@ export const getBookings = async () => {
     }
 };
 
+
+export const getBookingsToday = async (token) => {
+    try {
+        const response = await axiosInstance.get(`${apiBaseUrl}/today`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Sending the token in the Authorization header
+            },
+          });
+        return response.data; // Trả về danh sách booking
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        throw error; // Ném lỗi để xử lý ở nơi gọi
+    }
+};
+
+export const getBookedBookingsToday = async (token) => {
+    try {
+        const response = await axiosInstance.get(`${apiBaseUrl}/today/booked`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Sending the token in the Authorization header
+            },
+          });
+        return response.data; // Trả về danh sách booking
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        throw error; // Ném lỗi để xử lý ở nơi gọi
+    }
+};
+
 // Xem thông tin booking theo ID
 export const getBookingById = async (id) => {
     try {

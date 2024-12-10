@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/AdminBooking.css';
 import { deleteBooking, getBookings, updateBooking } from '../service/BookingApi';
 import ModalUpdateBooking from '../components/modal/ModalUpdateBooking';
+import { Link } from 'react-router-dom';
 
 const AdminBooking = () => {
   const [bookings, setBookings] = useState([]);
@@ -106,6 +107,11 @@ const AdminBooking = () => {
     <div className="admin-booking-container">
       <h1 className="admin-booking-title">Admin Booking</h1>
 
+      <div className="back-to-admin">
+        <Link to="/admin" className="btn btn-back">
+          &larr; Back to Admin Dashboard
+        </Link>
+      </div>
       {/* Bộ lọc */}
       <div className="filter-container">
         <label>

@@ -37,6 +37,20 @@ export const getUserRoleByToken = async (token) => {
     }
 };
 
+export const getUserToday = async (token) => {
+    try {
+        const response = await axios.get(`/${apiBaseUrl}/today`,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data; // Trả về dữ liệu người dùng
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error; // Ném lỗi để xử lý ở nơi gọi
+    }
+};
+
 export const getUserByToken = async (token) => {
     try {
         const response = await axios.get(`/${apiBaseUrl}/authenticated`,{
@@ -91,7 +105,7 @@ export const updateUser = async (id, userData) => {
 export const deleteUser = async (id) => {
     try {
         const response = await axios.delete(`/${apiBaseUrl}/${id}`);
-        return response.data; // Trả về dữ liệu kết quả xóa
+        return response; // Trả về dữ liệu kết quả xóa
     } catch (error) {
         console.error("Error deleting user:", error);
         throw error; // Ném lỗi để xử lý ở nơi gọi
